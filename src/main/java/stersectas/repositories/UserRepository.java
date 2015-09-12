@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import stersectas.domain.User;
 
-public interface TestRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 	Optional<User> findByUsername(String username);
 
