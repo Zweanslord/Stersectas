@@ -21,6 +21,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		
+		<!-- Allows making use of layout.resultingTitle. At time of adjustment, spring boot uses 1.2.9. 
+			 Revert to default when spring boot catches up. -->
+		<thymeleaf-layout-dialect.version>1.3.0</thymeleaf-layout-dialect.version>
 	</properties>
 
 	<dependencies>

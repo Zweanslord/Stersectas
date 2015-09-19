@@ -1,13 +1,18 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
 	<head>
 		<title>Stersectas</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	</head>
 	<body>
-		<p>Welcome!</p>
-		<p>This is a startup page for a galaxy in development.</p>
-		<p><a th:href="@{/private/}">>Let's move on to a private section.</a></p>
+		<section layout:fragment="content">
+			<p>Welcome!</p>
+			<p>This is a startup page for a galaxy in development.</p>
+			<p>
+				<a th:href="@{/private/}">Let's move on to a private section.</a>
+			</p>
+		</section>
 	</body>
 </html>

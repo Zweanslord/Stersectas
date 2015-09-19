@@ -1,0 +1,18 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title layout:title-pattern="$CONTENT_TITLE">Layout Template</title>
+	</head>
+	<body>
+		<header>
+			<h1 th:text="${layout.resultingTitle}">Page title</h1>
+		</header>
+		<section layout:fragment="content">
+			<p>Content</p>
+		</section>
+		<footer>
+			Interstellar civilizations carve their own path through space.
+		</footer>
+	</body>
+</html>
