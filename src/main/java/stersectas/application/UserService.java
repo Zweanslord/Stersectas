@@ -10,9 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import stersectas.SecurityConfiguration;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 
+/**
+ * Implements UserDetailService for user authorization in {@link SecurityConfiguration}.
+ */
 @Service
 public class UserService implements UserDetailsService, IUserService {
 

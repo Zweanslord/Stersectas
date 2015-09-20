@@ -12,6 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import stersectas.application.UserService;
 
+/**
+ * Using Spring Security for authorization of users.
+ * http://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/
+ */
 @Configuration
 @EnableWebMvcSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
