@@ -25,6 +25,8 @@
 		<!-- Allows making use of layout.resultingTitle. At time of adjustment, spring boot uses 1.2.9. 
 			 Revert to default when spring boot catches up. -->
 		<thymeleaf-layout-dialect.version>1.3.0</thymeleaf-layout-dialect.version>
+		
+		<sass-maven-plugin.version>2.12</sass-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -69,12 +71,70 @@
 	
 	<build>
 		<plugins>
+			<!-- SASS plugin to generate css from sass files -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>nl.geodienstencentrum.maven</groupId>
+				<artifactId>sass-maven-plugin</artifactId>
+				<version>${sass-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>convert-sass-to-css</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>update-stylesheets</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<resources>
+						<resource>
+							<source>
+								<directory>${basedir}/src/main/resources/static/stylesheets/sass</directory>
+								<include>**/*.sass</include>
+							</source>
+							<destination>${basedir}/src/main/resources/static/stylesheets/css</destination>
+						</resource>
+					</resources>
+					<useBourbon>true</useBourbon>
+					<useCompass>true</useCompass>
+				</configuration>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>nl.geodienstencentrum.maven</groupId>
+										<artifactId>sass-maven-plugin</artifactId>
+										<versionRange>[2.12,)</versionRange>
+										<goals>
+											<goal>update-stylesheets</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
-	
 
 </project>

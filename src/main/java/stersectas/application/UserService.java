@@ -8,9 +8,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import stersectas.SecurityConfiguration;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 
+/**
+ * Implements UserDetailService for user authorization in {@link SecurityConfiguration}.
+ */
 @Service
 public class UserService implements UserDetailsService {
 
