@@ -6,13 +6,13 @@
 		<link th:href="@{/stylesheets/css/main.css}" media="all" rel="stylesheet" />
 	</head>
 	<body>
-		<header>
+		<header role="banner">
 			<h1 th:text="${layout.resultingTitle}">Page title</h1>
 		</header>
-		<section layout:fragment="content">
+		<main layout:fragment="content">
 			<p>Content</p>
-		</section>
-		<footer>
+		</main>
+		<footer role="contentinfo">
 			Interstellar civilizations carve their own path through space.
 		</footer>
 	</body>

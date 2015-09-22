@@ -7,17 +7,17 @@
 		<title>Register</title>
 	</head>
 	<body>
-		<section layout:fragment="content">
-			<form th:action="@{/registration}" method="post"  th:object="${userDto}">
+		<main layout:fragment="content">
+			<form th:action="@{/registration}" method="post" th:object="${userDto}">
 				<div>
 					<label>User Name: <input type="text" th:field="*{username}" />
 					</label>
-					<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">name error</div>
+					<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</div>
 				</div>
 				<div>
 					<label>Password: <input type="password" th:field="*{password}" />
 					</label>
-					<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">pass error</div>
+					<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Pass error</div>
 				</div>
 				<div>
 					<label>Confirm Password: <input type="password" th:field="*{passwordConfirmation}" />
@@ -27,6 +27,6 @@
 					<input type="submit" value="Register" />
 				</div>
 			</form>
-		</section>
+		</main>
 	</body>
 </html>

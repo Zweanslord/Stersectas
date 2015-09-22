@@ -99,6 +99,9 @@
 							<destination>${basedir}/src/main/resources/static/stylesheets/css</destination>
 						</resource>
 					</resources>
+					<sassOptions>
+						<style>:expanded</style>
+					</sassOptions>
 					<useBourbon>true</useBourbon>
 					<useCompass>true</useCompass>
 				</configuration>
