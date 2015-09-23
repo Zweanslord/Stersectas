@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import stersectas.application.UserDto;
 import stersectas.application.UserService;
-import stersectas.domain.User;
-import stersectas.repositories.UserRepository;
 
 @Controller
 @RequestMapping
 public class RegistrationController {
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -26,17 +24,16 @@ public class RegistrationController {
 		model.addAttribute("userDto", new UserDto());
 		return "registration";
 	}
-	
+
 	@RequestMapping(value="/registration", method=RequestMethod.POST)
 	public String registerUser(@Valid UserDto userDto, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
-			this.userService.registerNewUser(userDto);
+			userService.registerNewUser(userDto);
 			return "redirect:/registration-complete";
 		}
-		
 		return "registration";
 	}
-	
+
 	@RequestMapping("/registration-complete")
 	public String registrationComplete() {
 		return "registration-complete";

@@ -8,10 +8,10 @@
 	</head>
 	<body>
 		<main layout:fragment="content">
-			<p>Welcome!</p>
-			<p>This is a startup page for a galaxy in development.</p>
+			<p th:text="#{welcome}"></p>
+			<p th:text="#{intro}"></p>
 			<p>
-				<a th:href="@{/registration}">register here</a>
+				<a th:href="@{/registration}" th:text="#{user.register}"></a>
 			</p>
 			<p>
 				<a th:href="@{/private/}">Let's move on to a private section.</a>

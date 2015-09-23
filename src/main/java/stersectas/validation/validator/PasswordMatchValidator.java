@@ -3,8 +3,6 @@ package stersectas.validation.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.springframework.beans.BeanUtils;
-
 import stersectas.application.UserDto;
 import stersectas.validation.PasswordsMatch;
 
