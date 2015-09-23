@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import stersectas.TestBase;
+import stersectas.BaseIT;
 
-public class UserServiceTest extends TestBase {
+public class UserServiceIT extends BaseIT {
 
 	@Autowired
 	private UserService userService;
