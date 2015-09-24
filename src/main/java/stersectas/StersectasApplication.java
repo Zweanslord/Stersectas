@@ -18,6 +18,9 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class StersectasApplication extends WebMvcConfigurerAdapter {
 
+	private static final String LOCALE_COOKIE_NAME = "Stersectas-language";
+	private static final Integer FOUR_WEEKS_IN_SECONDS = 60 * 60 * 24 * 7 * 4;
+
     public static void main(String[] args) {
         SpringApplication.run(StersectasApplication.class, args);
     }
@@ -26,12 +29,14 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 	public LocaleResolver localeResolver() {
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+		cookieLocaleResolver.setCookieName(LOCALE_COOKIE_NAME);
+		cookieLocaleResolver.setCookieMaxAge(FOUR_WEEKS_IN_SECONDS);
 		return cookieLocaleResolver;
 	}
 
 	/**
 	 * Maps the files to use for text messages. Basenames is relative to src/main/resources. Supporting english (_en)
-	 * and dutch, which is the default when no messages found.
+	 * and dutch, which is the default when no messages are found.
 	 */
 	@Bean
 	public MessageSource messageSource() {
