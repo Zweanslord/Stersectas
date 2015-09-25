@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<section layout:fragment="content">
-			<p th:inline="text">[[${#httpServletRequest.remoteUser}]]</p>
+			<p>So you are <span sec:authentication="name">A User</span></p>
 			<p>This ain't very private yet!</p>
 		</section>
 	</body>
