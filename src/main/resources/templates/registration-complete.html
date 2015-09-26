@@ -7,11 +7,11 @@
 		<title th:text="#{user.registration.complete}">Successful Registration</title>
 	</head>
 	<body>
-		<main layout:fragment="content">
+		<div layout:fragment="content" th:remove="tag">
 			<p>Successfully registered!</p>
 			<p>
 				Click <a th:href="@{/}">here</a> to return to the front page.
 			</p>
-		</main>
+		</div>
 	</body>
 </html>

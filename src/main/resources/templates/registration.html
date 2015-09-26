@@ -7,7 +7,7 @@
 		<title th:text="#{user.register}">Register</title>
 	</head>
 	<body>
-		<main layout:fragment="content">
+		<div layout:fragment="content" th:remove="tag">
 			<form th:action="@{/registration}" method="post" th:object="${userDto}">
 				<div>
 					<label><span th:text="#{user.name}" th:remove="tag">User Name</span>: <input type="text" th:field="*{username}" />
@@ -27,6 +27,6 @@
 					<input type="submit" value="Register" th:value="#{user.register}" />
 				</div>
 			</form>
-		</main>
+		</div>
 	</body>
 </html>

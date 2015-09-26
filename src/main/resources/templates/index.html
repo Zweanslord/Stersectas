@@ -4,14 +4,17 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   	  layout:decorator="layout/default">
 	<head>
-		<title>Stersectas</title>
+		<title>Stersectas Intro</title>
 	</head>
 	<body>
-		<main layout:fragment="content">
-			<p th:text="#{welcome}"></p>
-			<p th:text="#{intro}"></p>
+		<header role="banner" layout:fragment="header">
+			<h1><a th:href="@{/}" href="/">Stersectas</a></h1>
+		</header>
+		<main layout:fragment="main">
+			<h2 th:text="#{welcome}">Welcome!</h2>
+			<p th:text="#{intro}">Start page intro</p>
 			<p>
-				<a th:href="@{/registration}" th:text="#{user.register}"></a>
+				<a th:href="@{/registration}" th:text="#{user.register}">Register</a>
 			</p>
 			<p>
 				<a th:href="@{/private/}">Let's move on to a private section.</a>

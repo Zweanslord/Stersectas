@@ -30,31 +30,38 @@
 	</properties>
 
 	<dependencies>
+		<!-- Actuator is not yet explicitely used, but provides health statistics -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<!-- Adds object relational mapping (ORM) functionalities, such as repositories, for communication with the database -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- Spring security is used for authentication -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!-- Add possibility to use thymeleaf templates for the view -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<!-- Add spring security tags for use in thymeleaf templates -->
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity3</artifactId>
 		 </dependency>
+		<!-- Base dependency for spring and web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		
+		<!-- Currently using in memory database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -66,6 +73,8 @@
 			<version>9.4-1201-jdbc41</version>
 			<scope>runtime</scope>
 		</dependency> -->
+		
+		<!-- Test functionalities for spring boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -106,8 +115,8 @@
 					<sassOptions>
 						<style>:expanded</style>
 					</sassOptions>
-					<useBourbon>true</useBourbon>
-					<useCompass>true</useCompass>
+					<!-- <useBourbon>true</useBourbon> Not yet used, so no need to include as of yet -->
+					<!-- <useCompass>true</useCompass> Seems like it is unwise to add this, as development has been stopped -->
 				</configuration>
 			</plugin>
 		</plugins>
@@ -121,6 +130,7 @@
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
+								<!-- process-resources as phase is not known by the maven plugin in eclipse, hence the need to add this -->
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>nl.geodienstencentrum.maven</groupId>

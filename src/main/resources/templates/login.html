@@ -8,7 +8,7 @@
 		<title th:text="#{login}"></title>
 	</head>
 	<body>
-		<main layout:fragment="content">
+		<div layout:fragment="content" th:remove="tag">
 			<p th:if="${param.error}">Invalid username and password.</p>
 			<p th:if="${param.logout}">You have been logged out.</p>
 			<form th:action="@{/login}" method="post">
@@ -24,6 +24,6 @@
 					<input type="submit" value="Login" th:value="#{login}" />
 				</div>
 			</form>
-		</main>
+		</div>
 	</body>
 </html>

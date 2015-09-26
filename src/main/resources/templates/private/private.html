@@ -8,10 +8,10 @@
 		<title>Private</title>
 	</head>
 	<body>
-		<section layout:fragment="content">
+		<div layout:fragment="content" th:remove="tag">
 			<p>So you are <span sec:authentication="name">A User</span></p>
 			<p>This ain't very private yet!</p>
-		</section>
+		</div>
 	</body>
 </html>
 		
