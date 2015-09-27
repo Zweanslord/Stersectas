@@ -8,11 +8,16 @@
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<form th:action="@{/registration}" method="post" th:object="${userDto}">
+			<form th:action="@{/registration}" method="post" th:object="${registerUser}">
 				<div>
 					<label><span th:text="#{user.name}" th:remove="tag">User Name</span>: <input type="text" th:field="*{username}" />
 					</label>
 					<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</div>
+				</div>
+				<div>
+					<label><span th:text="#{user.email}" th:remove="tag">User Name</span>: <input type="text" th:field="*{email}" />
+					</label>
+					<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
 				</div>
 				<div>
 					<label><span th:text="#{user.password}" th:remove="tag">Password</span>: <input type="password" th:field="*{password}" />
