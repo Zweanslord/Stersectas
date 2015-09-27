@@ -9,23 +9,27 @@
 	<body>
 		<div layout:fragment="content" th:remove="tag">
 			<form th:action="@{/registration}" method="post" th:object="${userDto}">
-				<div>
-					<label><span th:text="#{user.name}" th:remove="tag">User Name</span>: <input type="text" th:field="*{username}" />
+				<p>
+					<label>
+						<span th:text="#{user.name}">User Name</span>
+						<input type="text" th:field="*{username}" />
 					</label>
 					<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</div>
-				</div>
-				<div>
-					<label><span th:text="#{user.password}" th:remove="tag">Password</span>: <input type="password" th:field="*{password}" />
+				</p>
+				<p>
+					<label>
+						<span th:text="#{user.password}">Password</span>
+						<input type="password" th:field="*{password}" />
 					</label>
 					<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Pass error</div>
-				</div>
-				<div>
-					<label><span th:text="#{user.password.confirm}" th:remove="tag">Confirm Password</span>: <input type="password" th:field="*{passwordConfirmation}" />
+				</p>
+				<p>
+					<label>
+						<span th:text="#{user.password.confirm}">Confirm Password</span>
+						<input type="password" th:field="*{passwordConfirmation}" />
 					</label>
-				</div>
-				<div>
-					<input type="submit" value="Register" th:value="#{user.register}" />
-				</div>
+				</p>
+				<button type="submit" th:text="#{user.register}">Register</button>
 			</form>
 		</div>
 	</body>

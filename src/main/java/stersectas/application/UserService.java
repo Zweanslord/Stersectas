@@ -21,20 +21,20 @@ import stersectas.repositories.UserRepository;
 public class UserService implements UserDetailsService, IUserService {
 
 	private final UserRepository userRepository;
-	
-	@Autowired
-	private PasswordEncoder encoder;
+
+	private final PasswordEncoder encoder;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
+		this.encoder = encoder;
 	}
-	
+
 	@Override
 	@Transactional
 	public User registerNewUser(UserDto userDto) {
 		User user = new User(userDto.getUsername(), encoder.encode(userDto.getPassword()));
-		
+
 		return userRepository.save(user);
 	}
 
