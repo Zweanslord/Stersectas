@@ -9,10 +9,10 @@ import stersectas.repositories.UserRepository;
 import stersectas.validation.UsernameAvailable;
 
 public class UsernameAvailableValidator implements ConstraintValidator<UsernameAvailable, String>{
-	
+
 	@Autowired
-	UserRepository userRepository;
-	
+	private UserRepository userRepository;
+
 	@Override
 	public void initialize(UsernameAvailable constraintAnnotation) {
 	}

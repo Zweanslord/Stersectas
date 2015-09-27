@@ -13,9 +13,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
  * requiring any application infrastructure.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = StersectasApplication.class)
+@SpringApplicationConfiguration(classes = { StersectasApplication.class, TestConfiguration.class })
 @WebAppConfiguration
 @Ignore
-public class BaseIT {
+public abstract class BaseIT {
 
 }

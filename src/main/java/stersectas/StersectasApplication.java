@@ -66,13 +66,13 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder;
 	}
-	
+
 	@Bean
 	public JavaMailSenderImpl javaMailSenderImpl() {
 		final JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
@@ -82,11 +82,15 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 		mailSenderImpl.setProtocol("smtps");
 		mailSenderImpl.setUsername("teststersectas@gmail.com");
 		mailSenderImpl.setPassword("zalastra");
+		mailSenderImpl.setJavaMailProperties(createJavaMailProperties());
+		return mailSenderImpl;
+	}
+
+	private Properties createJavaMailProperties() {
 		final Properties javaMailProps = new Properties();
 		javaMailProps.put("mail.debug", "true");
         javaMailProps.put("mail.smtp.auth", "true");
         javaMailProps.put("mail.smtp.starttls.enable", "true");
-        mailSenderImpl.setJavaMailProperties(javaMailProps);
-		return mailSenderImpl;
+		return javaMailProps;
 	}
 }

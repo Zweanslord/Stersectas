@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ public class UserServiceIT extends BaseIT {
 	private UserService userService;
 
 	@Test
-	@Ignore
 	public void registerUser() {
 		RegisterUser registerUser = new RegisterUser();
 		registerUser.setUsername("test-user");
@@ -32,4 +30,5 @@ public class UserServiceIT extends BaseIT {
 		assertNotEquals("12345", testUser.getPassword());
 		assertTrue(new BCryptPasswordEncoder().matches("12345", testUser.getPassword()));
 	}
+
 }

@@ -25,14 +25,15 @@ public class User implements UserDetails {
 	@Size(min = 3, max = 30)
 	@Column(nullable = false, unique = true)
 	private String username;
-	
+
 	@Email
 	@Column(nullable = false)
 	private String email;
 
 	@Column(nullable = false)
 	private String password;
-	
+
+	@Column(nullable = false)
 	private boolean enabled;
 
 	protected User() {
@@ -42,14 +43,14 @@ public class User implements UserDetails {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.enabled = false;
+		enabled = false;
 	}
 
 	@Override
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -58,9 +59,13 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return password;
 	}
-	
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+
+	public void enable() {
+		enabled = true;
+	}
+
+	public void disable() {
+		enabled = false;
 	}
 
 	@Override
@@ -87,5 +92,6 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 
 }
