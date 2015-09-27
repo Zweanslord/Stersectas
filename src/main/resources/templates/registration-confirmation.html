@@ -4,11 +4,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   	  layout:decorator="layout/default">
 	<head>
-		<title th:text="#{user.registration.complete.title}"></title>
+		<title th:text="#{user.registration.confirmed.title}">Registration Confirmation</title>
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<p th:text="#{user.registration.complete.message}"></p>
+			<div th:switch="${tokenError}" th:remove="tag">
+				<p th:case="false" th:text="#{user.registration.confirmed.message}"></p>
+				<p th:case="true" th:text="#{user.registration.confirmed.error}"></p>
+			</div>
 			<p>
 				Click <a th:href="@{/}">here</a> to return to the front page.
 			</p>

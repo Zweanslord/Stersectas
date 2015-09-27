@@ -32,15 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.permitAll();
 	}
 
-
-
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth, UserService userService,
-			PasswordEncoder passwordEncoder) throws Exception {
+	public void configureGlobal(AuthenticationManagerBuilder auth, UserService userService, PasswordEncoder encoder) throws Exception {
 		auth
 			.userDetailsService(userService)
-				.passwordEncoder(passwordEncoder);
+				.passwordEncoder(encoder);
 	}
-
-
 }

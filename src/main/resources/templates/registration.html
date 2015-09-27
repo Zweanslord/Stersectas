@@ -8,13 +8,20 @@
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<form th:action="@{/registration}" method="post" th:object="${userDto}">
+			<form th:action="@{/registration}" method="post" th:object="${registerUser}">
 				<p>
 					<label>
 						<span th:text="#{user.name}">User Name</span>
 						<input type="text" th:field="*{username}" />
 					</label>
 					<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</div>
+				</p>
+				<p>
+					<label>
+						<span th:text="#{user.email}">User Name</span>
+						<input type="text" th:field="*{email}" />
+					</label>
+					<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
 				</p>
 				<p>
 					<label>

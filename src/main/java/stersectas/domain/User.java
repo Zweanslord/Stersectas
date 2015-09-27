@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,29 +22,45 @@ public class User implements UserDetails {
 	@GeneratedValue
 	private Long id;
 
-	@Size(min = 8, max = 30)
+	@Size(min = 3, max = 30)
 	@Column(nullable = false, unique = true)
-	private String username = "";
+	private String username;
+	
+	@Email
+	@Column(nullable = false)
+	private String email;
 
 	@Column(nullable = false)
 	private String password;
+	
+	private boolean enabled;
 
 	protected User() {
 	}
 
-	public User(String username, String password) {
+	public User(String username, String email, String password) {
 		this.username = username;
+		this.email = email;
 		this.password = password;
+		this.enabled = false;
 	}
 
 	@Override
 	public String getUsername() {
 		return username;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
 
 	@Override
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	@Override
@@ -68,7 +85,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 
 }
