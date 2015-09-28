@@ -21,6 +21,7 @@ public class JavaMailSenderEmailService implements EmailService {
 	// TODO: make sending mail async to prevent long wait times on user side
 	// TODO: Use MimeMessage rather than SimpleMailMessage
 	@Override
+	@Async
 	public void send(SimpleMailMessage email) {
 		mailSender.send(email);
 	}
