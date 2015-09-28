@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import stersectas.application.UserService;
+
 @SpringBootApplication
 @EnableTransactionManagement(proxyTargetClass = true)
 public class StersectasApplication extends WebMvcConfigurerAdapter {
@@ -26,7 +29,9 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 	private static final Integer FOUR_WEEKS_IN_SECONDS = 60 * 60 * 24 * 7 * 4;
 
     public static void main(String[] args) {
-        SpringApplication.run(StersectasApplication.class, args);
+		ApplicationContext context = SpringApplication.run(StersectasApplication.class, args);
+		UserService userService = context.getBean(UserService.class);
+		userService.initializeUsers();
     }
 
 	@Bean

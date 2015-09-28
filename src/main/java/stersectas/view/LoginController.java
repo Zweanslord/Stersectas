@@ -15,7 +15,6 @@ public class LoginController {
 	
 	@RequestMapping("/login")
 	public String login() {
-		userService.createTestUser(); // TODO: delete test user creation
 		return "login";
 	}
 

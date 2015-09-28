@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,10 @@ import stersectas.repositories.VerificationTokenRepository;
 @Service
 public class UserService implements UserDetailsService {
 
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+	private static final String INITIAL_USERNAME = "initial";
+
 	private final UserRepository userRepository;
 	private final VerificationTokenRepository tokenRepository;
 	private final EmailService emailService;
@@ -40,17 +46,26 @@ public class UserService implements UserDetailsService {
 		this.encoder = encoder;
 	}
 
-	// TODO: remove once we no longer need a test user
 	@Transactional
-	public void createTestUser() {
-		if (!userRepository.findByUsername("test").isPresent()) {
-			User user = new User(
-					"test",
-					"test@test.com",
-					encoder.encode("password"));
-			user.enable();
-			userRepository.save(user);
+	public void initializeUsers() {
+		if (noEnabledUsersExistAndNoInitialUserExists()) {
+			createInitialUser();
 		}
+	}
+
+	private boolean noEnabledUsersExistAndNoInitialUserExists() {
+		return userRepository.findByEnabledTrue().isEmpty()
+				&& !userRepository.findByUsername(INITIAL_USERNAME).isPresent();
+	}
+
+	private void createInitialUser() {
+		log.info("Creating initial user.");
+		User user = new User(
+				INITIAL_USERNAME,
+				"test@test.com",
+				encoder.encode("password"));
+		user.enable();
+		userRepository.save(user);
 	}
 
 	@Transactional

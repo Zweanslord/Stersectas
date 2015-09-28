@@ -22,7 +22,6 @@ public class RegistrationController {
 
 	@RequestMapping(value="/registration", method=RequestMethod.GET)
 	public String registerForm(Model model) {
-		userService.createTestUser(); // TODO: delete test user creation
 		model.addAttribute("registerUser", new RegisterUser());
 		return "registration";
 	}
