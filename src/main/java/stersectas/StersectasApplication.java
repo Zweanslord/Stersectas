@@ -30,11 +30,11 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 	private static final String LOCALE_COOKIE_NAME = "Stersectas-language";
 	private static final Integer FOUR_WEEKS_IN_SECONDS = 60 * 60 * 24 * 7 * 4;
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(StersectasApplication.class, args);
 		UserService userService = context.getBean(UserService.class);
 		userService.initializeUsers();
-    }
+	}
 
 	@Bean
 	public Clock clock() {

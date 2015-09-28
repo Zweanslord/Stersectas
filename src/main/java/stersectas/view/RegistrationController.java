@@ -20,13 +20,13 @@ public class RegistrationController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value="/registration", method=RequestMethod.GET)
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public String registerForm(Model model) {
 		model.addAttribute("registerUser", new RegisterUser());
 		return "registration";
 	}
 
-	@RequestMapping(value="/registration", method=RequestMethod.POST)
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public String registerUser(@Valid RegisterUser registerUser, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
 			userService.registerNewUser(registerUser);
@@ -34,15 +34,15 @@ public class RegistrationController {
 		}
 		return "registration";
 	}
-	
-	@RequestMapping(value="registration-confirmation", method=RequestMethod.GET)
+
+	@RequestMapping(value = "registration-confirmation", method = RequestMethod.GET)
 	public String registrationConfirmation(Model model, @RequestParam("token") String token) {
 		boolean confirmed = userService.confirmEmailVerification(token);
 		model.addAttribute("tokenError", !confirmed);
 		return "registration-confirmation";
 	}
 
-	@RequestMapping(value="/registration-complete", method=RequestMethod.GET)
+	@RequestMapping(value = "/registration-complete", method = RequestMethod.GET)
 	public String registrationComplete() {
 		return "registration-complete";
 	}

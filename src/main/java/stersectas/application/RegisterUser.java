@@ -13,23 +13,23 @@ public class RegisterUser {
 	@Size(min = 3, max = 30)
 	@UsernameAvailable
 	private String username;
-	
+
 	@Email
 	private String email;
 
 	@Size(min = 8, max = 100)
 	private String password;
-	
+
 	@Size(min = 8, max = 100)
 	private String passwordConfirmation;
 
 	public RegisterUser() {
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -41,11 +41,11 @@ public class RegisterUser {
 	public String getPasswordConfirmation() {
 		return passwordConfirmation;
 	}
-	
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public void setEmail(String email) {
 		this.email = email;
 	}

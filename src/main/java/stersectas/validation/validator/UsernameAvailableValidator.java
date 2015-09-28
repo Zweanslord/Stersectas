@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import stersectas.repositories.UserRepository;
 import stersectas.validation.UsernameAvailable;
 
-public class UsernameAvailableValidator implements ConstraintValidator<UsernameAvailable, String>{
+public class UsernameAvailableValidator implements ConstraintValidator<UsernameAvailable, String> {
 
 	@Autowired
 	private UserRepository userRepository;
