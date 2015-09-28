@@ -37,7 +37,7 @@ public class RegistrationController {
 	
 	@RequestMapping(value="registration-confirmation", method=RequestMethod.GET)
 	public String registrationConfirmation(Model model, @RequestParam("token") String token) {
-		boolean confirmed = userService.confirmEmilVerification(token);
+		boolean confirmed = userService.confirmEmailVerification(token);
 		model.addAttribute("tokenError", !confirmed);
 		return "registration-confirmation";
 	}

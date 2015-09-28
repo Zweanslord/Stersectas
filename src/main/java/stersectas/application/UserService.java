@@ -1,7 +1,7 @@
 package stersectas.application;
 
 import java.time.Clock;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -82,7 +82,7 @@ public class UserService implements UserDetailsService {
 				encoder.encode(userDto.getPassword())));
 
 		Token token = tokenGenerator.generateToken();
-		tokenRepository.save(new VerificationToken(token, user, LocalDate.now(clock)));
+		tokenRepository.save(new VerificationToken(token, user, LocalDateTime.now(clock)));
 
 		sendEmailVerification(user, token);
 	}
@@ -99,14 +99,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	@Transactional
-	public boolean confirmEmilVerification(String tokenString) {
+	public boolean confirmEmailVerification(String tokenString) {
 		Optional<VerificationToken> optionalToken = tokenRepository.findByToken(new Token(tokenString));
 		if (!optionalToken.isPresent()) {
 			return false;
 		}
 
 		VerificationToken token = optionalToken.get();
-		if (token.isExpired(LocalDate.now(clock))) {
+		if (token.isExpired(LocalDateTime.now(clock))) {
 			return false;
 		}
 

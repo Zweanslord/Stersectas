@@ -1,10 +1,14 @@
 package stersectas;
 
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import stersectas.stub.TimeTravellingClock;
 
 /**
  * Super class for Integration Tests (ITs) allowing them to make use of the application configuration, database, etc.
@@ -17,5 +21,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 @Ignore
 public abstract class BaseIT {
+
+	@Autowired
+	private TimeTravellingClock clock;
+
+	@After
+	public void breakDown() {
+		clock.travelThroughTimeToOrigin();
+	}
 
 }

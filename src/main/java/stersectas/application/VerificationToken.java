@@ -1,6 +1,6 @@
 package stersectas.application;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -28,15 +28,15 @@ public class VerificationToken {
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 
-	private LocalDate expirationDate;
+	private LocalDateTime expirationTime;
 
 	protected VerificationToken() {
 	}
 
-	public VerificationToken(Token token, User user, LocalDate today) {
+	public VerificationToken(Token token, User user, LocalDateTime now) {
 		this.token = token;
 		this.user = user;
-		expirationDate = today.plusDays(EXPIRATION_DAYS);
+		expirationTime = now.plusDays(EXPIRATION_DAYS);
 	}
 
 	public Long getId() {
@@ -51,11 +51,11 @@ public class VerificationToken {
 		return user;
 	}
 
-	public LocalDate getExpirationDate() {
-		return expirationDate;
+	public LocalDateTime getExpirationDate() {
+		return expirationTime;
 	}
 
-	public boolean isExpired(LocalDate today) {
-		return today.isAfter(expirationDate);
+	public boolean isExpired(LocalDateTime now) {
+		return now.isAfter(expirationTime);
 	}
 }
