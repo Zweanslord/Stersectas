@@ -38,6 +38,24 @@ public class UserServiceIT extends BaseIT {
 		assertEquals("test-user", testUser.getUsername());
 		assertNotEquals("12345", testUser.getPassword());
 		assertTrue(new BCryptPasswordEncoder().matches("12345", testUser.getPassword()));
+		assertFalse(testUser.isEnabled());
+	}
+
+	@Test
+	@Transactional
+	public void confirmRegistration() {
+		RegisterUser registerUser = new RegisterUser();
+		registerUser.setUsername("test-user");
+		registerUser.setEmail("test@test.com");
+		registerUser.setPassword("12345");
+
+		userService.registerNewUser(registerUser);
+
+		boolean confirmation = userService.confirmEmilVerification("test-token");
+		User user = userRepository.findByUsername("test-user").get();
+
+		assertTrue(confirmation);
+		assertTrue(user.isEnabled());
 	}
 
 	@Test

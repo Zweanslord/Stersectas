@@ -2,6 +2,7 @@ package stersectas.application;
 
 import java.time.LocalDate;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,8 @@ public class VerificationToken {
 	@GeneratedValue
 	private Long id;
 
-	private String token;
+	@Embedded
+	private Token token;
 
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
@@ -31,17 +33,17 @@ public class VerificationToken {
 	protected VerificationToken() {
 	}
 
-	public VerificationToken(String token, User user, LocalDate now) {
+	public VerificationToken(Token token, User user, LocalDate today) {
 		this.token = token;
 		this.user = user;
-		expirationDate = now.plusDays(EXPIRATION_DAYS);
+		expirationDate = today.plusDays(EXPIRATION_DAYS);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getToken() {
+	public Token getToken() {
 		return token;
 	}
 

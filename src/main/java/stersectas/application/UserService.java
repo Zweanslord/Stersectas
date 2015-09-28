@@ -1,8 +1,8 @@
 package stersectas.application;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,16 +34,22 @@ public class UserService implements UserDetailsService {
 	private final VerificationTokenRepository tokenRepository;
 	private final EmailService emailService;
 	private final PasswordEncoder encoder;
+	private final TokenGenerator tokenGenerator;
+	private final Clock clock;
 
 	@Autowired
 	public UserService(UserRepository userRepository,
 			VerificationTokenRepository tokenRepository,
 			EmailService emailService,
-			PasswordEncoder encoder) {
+			PasswordEncoder encoder,
+			TokenGenerator tokenGenerator,
+			Clock clock) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.emailService = emailService;
 		this.encoder = encoder;
+		this.tokenGenerator = tokenGenerator;
+		this.clock = clock;
 	}
 
 	@Transactional
@@ -75,8 +81,8 @@ public class UserService implements UserDetailsService {
 				userDto.getEmail(),
 				encoder.encode(userDto.getPassword())));
 
-		String token = UUID.randomUUID().toString();
-		tokenRepository.save(new VerificationToken(token, user, LocalDate.now()));
+		Token token = tokenGenerator.generateToken();
+		tokenRepository.save(new VerificationToken(token, user, LocalDate.now(clock)));
 
 		sendEmailVerification(user, token);
 	}
@@ -84,23 +90,23 @@ public class UserService implements UserDetailsService {
 	// TODO: make this method work for all email confirmations (registration or changing email)
 	// TODO: make this method agnostic to the domain address
 	// TODO: internationalization
-	public void sendEmailVerification(User user, String token) {
+	public void sendEmailVerification(User user, Token token) {
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setTo(user.getEmail());
 		email.setSubject("Registration Confirmation");
-		email.setText("http://localhost:8080/registration-confirmation?token=" + token);
+		email.setText("http://localhost:8080/registration-confirmation?token=" + token.toString());
 		emailService.send(email);
 	}
 
 	@Transactional
 	public boolean confirmEmilVerification(String tokenString) {
-		Optional<VerificationToken> optionalToken = tokenRepository.findByToken(tokenString);
+		Optional<VerificationToken> optionalToken = tokenRepository.findByToken(new Token(tokenString));
 		if (!optionalToken.isPresent()) {
 			return false;
 		}
 
 		VerificationToken token = optionalToken.get();
-		if (token.isExpired(LocalDate.now())) {
+		if (token.isExpired(LocalDate.now(clock))) {
 			return false;
 		}
 

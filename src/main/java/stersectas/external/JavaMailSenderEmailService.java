@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import stersectas.application.EmailService;
 
 @Service(value = "emailService")
-public class EmailServiceImpl implements EmailService {
+public class JavaMailSenderEmailService implements EmailService {
 
 	private final JavaMailSender mailSender;
 
 	@Autowired
-	public EmailServiceImpl(JavaMailSender mailSender) {
+	public JavaMailSenderEmailService(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 

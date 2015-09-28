@@ -1,5 +1,7 @@
 package stersectas;
 
+import java.time.Clock;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -33,6 +35,11 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 		UserService userService = context.getBean(UserService.class);
 		userService.initializeUsers();
     }
+
+	@Bean
+	public Clock clock() {
+		return Clock.system(ZoneId.of("Europe/Amsterdam"));
+	}
 
 	@Bean
 	public LocaleResolver localeResolver() {
