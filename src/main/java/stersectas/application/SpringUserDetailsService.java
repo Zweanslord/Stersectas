@@ -2,18 +2,28 @@ package stersectas.application;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import stersectas.SecurityConfiguration;
+import stersectas.domain.Role;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 
+/**
+ * Implements UserDetailService for user authorization in {@link SecurityConfiguration}.
+ */
 @Service("UserDetailsService")
 public class SpringUserDetailsService implements UserDetailsService {
+
+	private static final String ROLE_PREFIX = "ROLE_";
 
 	private final UserRepository userRepository;
 
@@ -34,10 +44,16 @@ public class SpringUserDetailsService implements UserDetailsService {
 					true,
 					true,
 					true,
-					new HashSet<>());
+					convertToGrantedAuthorities(user.getRole()));
 		} else {
 			throw new UsernameNotFoundException("Username not found.");
 		}
+	}
+
+	private Set<GrantedAuthority> convertToGrantedAuthorities(Role role) {
+		HashSet<GrantedAuthority> authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.name()));
+		return authorities;
 	}
 
 }

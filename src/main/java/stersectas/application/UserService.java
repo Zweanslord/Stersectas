@@ -12,14 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import stersectas.SecurityConfiguration;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 import stersectas.repositories.VerificationTokenRepository;
 
-/**
- * Implements UserDetailService for user authorization in {@link SecurityConfiguration}.
- */
 @Service
 public class UserService {
 
@@ -63,16 +59,17 @@ public class UserService {
 	private void ensureInitialUserIsPresentAndEnabled() {
 		Optional<User> optionalUser = userRepository.findByUsername(INITIAL_USERNAME);
 		if (optionalUser.isPresent()) {
-			ensureUserIsEnabled(optionalUser.get());
+			ensureUserIsEnabledAndAdministrator(optionalUser.get());
 		} else {
 			createInitialUser();
 		}
 	}
 
-	private void ensureUserIsEnabled(User user) {
+	private void ensureUserIsEnabledAndAdministrator(User user) {
 		if (user.isDisabled()) {
 			user.enable();
 		}
+		user.promoteToAdministrator();
 	}
 
 	private void createInitialUser() {
@@ -82,15 +79,16 @@ public class UserService {
 				"test@test.com",
 				encoder.encode("password"));
 		user.enable();
+		user.promoteToAdministrator();
 		userRepository.save(user);
 	}
 
 	@Transactional
-	public void registerNewUser(RegisterUser userDto) {
+	public void registerNewUser(RegisterUser registerUser) {
 		User user = userRepository.save(new User(
-				userDto.getUsername(),
-				userDto.getEmail(),
-				encoder.encode(userDto.getPassword())));
+				registerUser.getUsername(),
+				registerUser.getEmail(),
+				encoder.encode(registerUser.getPassword())));
 
 		Token token = tokenGenerator.generateToken();
 		tokenRepository.save(new VerificationToken(token, user, LocalDateTime.now(clock)));
@@ -125,6 +123,12 @@ public class UserService {
 		user.enable();
 
 		return true;
+	}
+
+	@Transactional
+	public void promoteUserToAdministrator(String username) {
+		User user = userRepository.findByUsername(username).get();
+		user.promoteToAdministrator();
 	}
 
 }

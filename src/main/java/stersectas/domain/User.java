@@ -29,6 +29,8 @@ public class User {
 	@Column(nullable = false)
 	private boolean enabled;
 
+	private Role role;
+
 	protected User() {
 	}
 
@@ -37,6 +39,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		enabled = false;
+		role = Role.USER;
 	}
 
 	public void enable() {
@@ -45,6 +48,24 @@ public class User {
 
 	public void disable() {
 		enabled = false;
+	}
+
+	public void promoteToAdministrator() {
+		if (isDisabled()) {
+			throw new IllegalStateException("Can't promote disabled user to administrator.");
+		}
+		role = Role.ADMIN;
+	}
+
+	public void demoteToUser() {
+		if (isDisabled()) {
+			throw new IllegalStateException("Can't demote disabled user");
+		}
+		role = Role.USER;
+	}
+
+	public boolean isAdministrator() {
+		return role == Role.ADMIN;
 	}
 
 	public String getUsername() {
@@ -65,6 +86,10 @@ public class User {
 
 	public boolean isDisabled() {
 		return !enabled;
+	}
+
+	public Role getRole() {
+		return role;
 	}
 
 }

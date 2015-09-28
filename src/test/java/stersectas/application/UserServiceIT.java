@@ -157,4 +157,14 @@ public class UserServiceIT extends BaseIT {
 		userService.registerNewUser(registerUser);
 	}
 
+	@Test
+	@Transactional
+	public void promoteUser() {
+		registerAndEnableAUser();
+		userService.promoteUserToAdministrator("test-user");
+
+		User user = userRepository.findByUsername("test-user").get();
+		assertTrue(user.isAdministrator());
+	}
+
 }
