@@ -8,9 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +21,7 @@ import stersectas.repositories.VerificationTokenRepository;
  * Implements UserDetailService for user authorization in {@link SecurityConfiguration}.
  */
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -54,14 +51,28 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public void initializeUsers() {
-		if (noEnabledUsersExistAndNoInitialUserExists()) {
+		if (noEnabledUsersExist()) {
+			ensureInitialUserIsPresentAndEnabled();
+		}
+	}
+
+	private boolean noEnabledUsersExist() {
+		return userRepository.findByEnabledTrue().isEmpty();
+	}
+
+	private void ensureInitialUserIsPresentAndEnabled() {
+		Optional<User> optionalUser = userRepository.findByUsername(INITIAL_USERNAME);
+		if (optionalUser.isPresent()) {
+			ensureUserIsEnabled(optionalUser.get());
+		} else {
 			createInitialUser();
 		}
 	}
 
-	private boolean noEnabledUsersExistAndNoInitialUserExists() {
-		return userRepository.findByEnabledTrue().isEmpty()
-				&& !userRepository.findByUsername(INITIAL_USERNAME).isPresent();
+	private void ensureUserIsEnabled(User user) {
+		if (user.isDisabled()) {
+			user.enable();
+		}
 	}
 
 	private void createInitialUser() {
@@ -114,16 +125,6 @@ public class UserService implements UserDetailsService {
 		user.enable();
 
 		return true;
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> user = userRepository.findByUsername(username);
-		if (user.isPresent()) {
-			return user.get();
-		} else {
-			throw new UsernameNotFoundException("Username not found.");
-		}
 	}
 
 }

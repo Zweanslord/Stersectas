@@ -8,7 +8,7 @@ import java.time.ZoneId;
 
 public class TimeTravellingClock extends Clock {
 
-	private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Amsterdam");
+	private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("UTC");
 	private static final Instant DEFAULT_INSTANT = toInstant("2015-09-10T16:21:07", DEFAULT_ZONE_ID);
 
 	private static Instant toInstant(String localDateTime, ZoneId zone) {

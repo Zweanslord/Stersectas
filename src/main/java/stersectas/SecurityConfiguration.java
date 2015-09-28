@@ -6,9 +6,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import stersectas.application.UserService;
 
 /**
  * Using Spring Security for authorization of users.
@@ -33,9 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth, UserService userService, PasswordEncoder encoder) throws Exception {
+	public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
+			PasswordEncoder encoder) throws Exception {
 		auth
-			.userDetailsService(userService)
+				.userDetailsService(userDetailsService)
 				.passwordEncoder(encoder);
 	}
 }

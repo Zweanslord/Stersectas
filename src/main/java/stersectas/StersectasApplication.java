@@ -38,8 +38,7 @@ public class StersectasApplication extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public Clock clock() {
-		// NOTE(Maarten): we should probably keep server time in UTC
-		return Clock.system(ZoneId.of("Europe/Amsterdam"));
+		return Clock.system(ZoneId.of("UTC"));
 	}
 
 	@Bean

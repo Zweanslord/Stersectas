@@ -3,6 +3,7 @@ package stersectas.application;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
@@ -11,12 +12,13 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import stersectas.BaseIT;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
+import stersectas.stub.EmailServiceStub;
 import stersectas.stub.TimeTravellingClock;
 
 public class UserServiceIT extends BaseIT {
@@ -30,6 +32,9 @@ public class UserServiceIT extends BaseIT {
 	@Autowired
 	private TimeTravellingClock clock;
 
+	@Autowired
+	private EmailServiceStub emailServiceStub;
+
 	@Test
 	@Transactional
 	public void registerUser() {
@@ -39,12 +44,15 @@ public class UserServiceIT extends BaseIT {
 		registerUser.setPassword("12345");
 
 		userService.registerNewUser(registerUser);
+		SimpleMailMessage email = emailServiceStub.getLastEmail();
 
-		UserDetails testUser = userService.loadUserByUsername("test-user");
+		User testUser = userRepository.findByUsername("test-user").get();
 		assertEquals("test-user", testUser.getUsername());
 		assertNotEquals("12345", testUser.getPassword());
 		assertTrue(new BCryptPasswordEncoder().matches("12345", testUser.getPassword()));
 		assertFalse(testUser.isEnabled());
+		assertNotNull(email);
+		assertEquals("test@test.com", email.getTo()[0]);
 	}
 
 	@Test
@@ -101,8 +109,9 @@ public class UserServiceIT extends BaseIT {
 	@Transactional
 	public void createInitialUser() {
 		userService.initializeUsers();
-		UserDetails initialUser = userService.loadUserByUsername("initial");
+		User initialUser = userRepository.findByUsername("initial").get();
 		assertEquals("initial", initialUser.getUsername());
+		assertTrue(initialUser.isEnabled());
 	}
 
 	@Test
@@ -125,6 +134,27 @@ public class UserServiceIT extends BaseIT {
 		User user = userRepository.findByUsername("test-user").get();
 		user.enable();
 		userRepository.save(user);
+	}
+
+	@Test
+	@Transactional
+	public void initialiseWithDisabledInitialUser() {
+		registerInitialUser();
+		assertFalse(userRepository.findByUsername("initial").get().isEnabled());
+
+		userService.initializeUsers();
+
+		User initialUser = userRepository.findByUsername("initial").get();
+		assertEquals("initial", initialUser.getUsername());
+		assertTrue(initialUser.isEnabled());
+	}
+
+	private void registerInitialUser() {
+		RegisterUser registerUser = new RegisterUser();
+		registerUser.setUsername("initial");
+		registerUser.setEmail("test@test.com");
+		registerUser.setPassword("password");
+		userService.registerNewUser(registerUser);
 	}
 
 }
