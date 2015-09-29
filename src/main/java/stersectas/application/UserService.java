@@ -131,4 +131,9 @@ public class UserService {
 		user.promoteToAdministrator();
 	}
 
+	@Transactional(readOnly = true)
+	public Iterable<User> findAllUsers() {
+		return userRepository.findAll();
+	}
+
 }

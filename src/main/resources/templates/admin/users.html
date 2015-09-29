@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title th:title="#{user.management}">User Management</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<table>
+				<thead>
+					<tr>
+						<th th:text="#{user.name}"></th>
+						<th th:text="#{role}"></th>
+						<th th:text="#{enabled}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${users}">
+						<td th:text="${user.username}">Alpha</td>
+						<td th:text="#{${'role.' + #strings.toLowerCase(user.role)}}">Administrator</td>
+						<td th:text="${user.enabled}? #{enabled} : #{disabled}">Enabled</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+		

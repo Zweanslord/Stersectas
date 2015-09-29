@@ -11,6 +11,7 @@
 		<div layout:fragment="content" th:remove="tag">
 			<p>Welcome Administrator <span sec:authentication="name">Mr. Administrator</span></p>
 			<p>This will be the administrator section, only accessible to administrators.</p>
+			<p>To <a th:href="@{/admin/users}">Users</a></p>
 		</div>
 	</body>
 </html>
