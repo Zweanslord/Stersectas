@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title th:title="#{user.managing(${user.username})}">Managing user Test</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form method="post" th:action="@{/}">
+				<p th:text="${user.enabled}? #{enabled} : #{disabled}">Enabled</p>
+				<p th:text="#{${'role.' + #strings.toLowerCase(user.role)}}">Administrator</p>
+				<button th:if="${!user.isAdministrator()}"
+					type="submit" 
+					th:formaction="@{/admin/user/__${user.username}__/promote}"
+					th:text="#{user.promote}">Promote</button>
+				<button th:if="${user.isAdministrator()}" 
+					type="submit" 
+					th:formaction="@{/admin/user/__${user.username}__/demote}"
+					th:text="#{user.demote}">Demote</button>
+			</form>
+		</div>
+	</body>
+</html>
+		

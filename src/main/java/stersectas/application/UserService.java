@@ -49,6 +49,7 @@ public class UserService {
 	public void initializeUsers() {
 		if (noEnabledUsersExist()) {
 			ensureInitialUserIsPresentAndEnabled();
+			addTestUser();
 		}
 	}
 
@@ -80,6 +81,17 @@ public class UserService {
 				encoder.encode("password"));
 		user.enable();
 		user.promoteToAdministrator();
+		userRepository.save(user);
+	}
+
+	// TODO should be removed when it is possible to run on local development without mailing
+	// or when testing profile can be enabled
+	private void addTestUser() {
+		User user = new User(
+				"test",
+				"test@test.com",
+				encoder.encode("password"));
+		user.enable();
 		userRepository.save(user);
 	}
 
@@ -131,9 +143,20 @@ public class UserService {
 		user.promoteToAdministrator();
 	}
 
+	@Transactional
+	public void demoteUserToUser(String username) {
+		User user = userRepository.findByUsername(username).get();
+		user.demoteToUser();
+	}
+
 	@Transactional(readOnly = true)
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username).get();
 	}
 
 }

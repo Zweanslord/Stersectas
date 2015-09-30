@@ -19,12 +19,19 @@
 				</thead>
 				<tbody>
 					<tr th:each="user : ${users}">
-						<td th:text="${user.username}">Alpha</td>
+						<td><a th:href="@{user/__${user.username}__}" th:text="${user.username}">Alpha</a></td>
 						<td th:text="#{${'role.' + #strings.toLowerCase(user.role)}}">Administrator</td>
 						<td th:text="${user.enabled}? #{enabled} : #{disabled}">Enabled</td>
 					</tr>
 				</tbody>
 			</table>
+			<h2 th:text="Roles"></h2>
+			<dl>
+				<dt th:text="#{role.user}"></dt>
+				<dd th:text="#{role.user.description}"></dd>
+				<dt th:text="#{role.admin}"></dt>
+				<dd th:text="#{role.admin.description}"></dd>
+			</dl>
 		</div>
 	</body>
 </html>
