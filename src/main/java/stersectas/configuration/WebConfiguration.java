@@ -27,7 +27,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasenames(
 				"i18n/common",
-				"i18n/user");
+				"i18n/user",
+				"i18n/email");
 		messageSource.setFallbackToSystemLocale(false);
 		return messageSource;
 	}

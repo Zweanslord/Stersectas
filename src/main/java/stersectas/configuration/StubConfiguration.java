@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import stersectas.application.EmailService;
+import stersectas.application.email.EmailService;
 import stersectas.configuration.profile.TestingProfile;
 import stersectas.stub.EmailServiceStub;
 import stersectas.stub.TimeTravellingClock;

@@ -12,10 +12,11 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import stersectas.BaseIT;
+import stersectas.application.email.Email;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 import stersectas.stub.EmailServiceStub;
@@ -23,6 +24,8 @@ import stersectas.stub.TimeTravellingClock;
 import stersectas.stub.VerificationTokenLookupService;
 
 public class UserServiceIT extends BaseIT {
+
+	private static final MockHttpServletRequest REQUEST = new MockHttpServletRequest();
 
 	@Autowired
 	private UserService userService;
@@ -47,8 +50,8 @@ public class UserServiceIT extends BaseIT {
 		registerUser.setEmail("test@test.com");
 		registerUser.setPassword("12345");
 
-		userService.registerNewUser(registerUser);
-		SimpleMailMessage email = emailServiceStub.getLastEmail();
+		userService.registerNewUser(registerUser, REQUEST);
+		Email email = emailServiceStub.getLastEmail();
 
 		User testUser = userRepository.findByUsername("test-user").get();
 		assertEquals("test-user", testUser.getUsername());
@@ -56,13 +59,13 @@ public class UserServiceIT extends BaseIT {
 		assertTrue(new BCryptPasswordEncoder().matches("12345", testUser.getPassword()));
 		assertFalse(testUser.isEnabled());
 		assertNotNull(email);
-		assertEquals("test@test.com", email.getTo()[0]);
+		assertEquals("test@test.com", email.getTo());
 	}
 
 	@Test
 	@Transactional
 	public void confirmRegistrationImmediately() {
-		userService.registerNewUser(createRegisterUser("test-user"));
+		userService.registerNewUser(createRegisterUser("test-user"), REQUEST);
 		String token = findToken("test-user");
 
 		boolean confirmation = userService.confirmEmailVerification(token);
@@ -89,7 +92,7 @@ public class UserServiceIT extends BaseIT {
 	public void confirmRegistrationAnHourLater() {
 		LocalDateTime dateTime = LocalDateTime.parse("2015-09-28T14:42:21");
 		clock.travelThroughTimeTo(dateTime);
-		userService.registerNewUser(createRegisterUser("test-user"));
+		userService.registerNewUser(createRegisterUser("test-user"), REQUEST);
 
 		clock.travelThroughTimeTo(dateTime.plusHours(1));
 		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
@@ -104,7 +107,7 @@ public class UserServiceIT extends BaseIT {
 	public void registrationExpired() {
 		LocalDateTime dateTime = LocalDateTime.parse("2015-09-28T14:42:21");
 		clock.travelThroughTimeTo(dateTime);
-		userService.registerNewUser(createRegisterUser("test-user"));
+		userService.registerNewUser(createRegisterUser("test-user"), REQUEST);
 
 		clock.travelThroughTimeTo(dateTime.plusDays(1).plusSeconds(1));
 		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
@@ -139,7 +142,7 @@ public class UserServiceIT extends BaseIT {
 		registerUser.setUsername("test-user");
 		registerUser.setEmail("test@test.com");
 		registerUser.setPassword("12345");
-		userService.registerNewUser(registerUser);
+		userService.registerNewUser(registerUser, REQUEST);
 		User user = userRepository.findByUsername("test-user").get();
 		user.enable();
 		userRepository.save(user);
@@ -163,7 +166,7 @@ public class UserServiceIT extends BaseIT {
 		registerUser.setUsername("initial");
 		registerUser.setEmail("test@test.com");
 		registerUser.setPassword("password");
-		userService.registerNewUser(registerUser);
+		userService.registerNewUser(registerUser, REQUEST);
 	}
 
 	@Test

@@ -1,11 +1,11 @@
 package stersectas.stub;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import stersectas.application.email.Email;
 import stersectas.configuration.profile.TestingProfile;
 
 @RequestMapping
@@ -18,7 +18,7 @@ public class EmailController {
 
 	@RequestMapping("stub/email")
 	@ResponseBody
-	public SimpleMailMessage showLastEmail() {
+	public Email showLastEmail() {
 		return emailStub.getLastEmail();
 	}
 

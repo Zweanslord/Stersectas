@@ -4,14 +4,16 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import stersectas.application.email.VerificationEmailService;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 import stersectas.repositories.VerificationTokenRepository;
@@ -26,26 +28,29 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final VerificationTokenRepository tokenRepository;
-	private final EmailService emailService;
+	private final VerificationEmailService verificationEmailService;
 	private final PasswordEncoder encoder;
 	private final Clock clock;
 
 	@Autowired
 	public UserService(UserRepository userRepository,
 			VerificationTokenRepository tokenRepository,
-			EmailService emailService,
+			VerificationEmailService verificationEmailService,
 			PasswordEncoder encoder,
 			Clock clock) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
-		this.emailService = emailService;
+		this.verificationEmailService = verificationEmailService;
 		this.encoder = encoder;
 		this.clock = clock;
 	}
 
-	public void registerNewUser(RegisterUser registerUser) {
+	// FIXME Dependency on HttpServletRequest just seems wrong here
+	// but is at the moment required later on to create mail with full url back to application
+	// and localised content
+	public void registerNewUser(RegisterUser registerUser, HttpServletRequest request) {
 		User user = registerUser(registerUser);
-		sendEmailVerification(user);
+		sendEmailVerification(user, request);
 	}
 
 	@Transactional
@@ -57,25 +62,11 @@ public class UserService {
 	}
 
 	@Transactional
-	private void sendEmailVerification(User user) {
+	private void sendEmailVerification(User user, HttpServletRequest request) {
 		VerificationToken verificationToken = VerificationToken.create(user, LocalDateTime.now(clock));
+		verificationToken = tokenRepository.save(verificationToken);
 
-		tokenRepository.save(verificationToken);
-
-		sendEmailVerification(user, verificationToken);
-	}
-
-	// TODO: make this method work for all email confirmations (registration or changing email)
-	// TODO: make this method agnostic to the domain address
-	// TODO: internationalization
-	public void sendEmailVerification(User user, VerificationToken verificationToken) {
-		log.info("Sending verification token %s to %s for registration of %s",
-				verificationToken.tokenString(), user.getEmail(), user.getUsername());
-		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(user.getEmail());
-		email.setSubject("Registration Confirmation");
-		email.setText("http://localhost:8080/registration-confirmation?token=" + verificationToken.tokenString());
-		emailService.send(email);
+		verificationEmailService.sendEmailVerification(user, verificationToken, request);
 	}
 
 	@Transactional
@@ -158,6 +149,7 @@ public class UserService {
 
 	@Transactional
 	public void initialiseTestUser() {
+		log.info("Creating test user.");
 		Optional<User> optionalUser = userRepository.findByUsername(TEST_USERNAME);
 		if (!optionalUser.isPresent()) {
 			User user = new User(

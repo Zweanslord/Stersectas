@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+	<body>
+		<h2 th:text="#{email.register.verification.description(${username})}">Email verification</h2>
+		<p th:text="${username}">
+			TestUser, thank you for registering! Below you will find a link to verify your e-mail for your newly created account. Afterwards you can log into Stersectas!
+		</p>
+		<a th:href="@{/registration-confirmation(token=${token})}" th:title="#{email.register.verification.link}"><strong th:text="#{email.register.verification.link}">Verify your email!</strong></a>
+	</body>
+</html>

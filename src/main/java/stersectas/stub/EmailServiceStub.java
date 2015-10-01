@@ -1,20 +1,19 @@
 package stersectas.stub;
 
-import org.springframework.mail.SimpleMailMessage;
-
-import stersectas.application.EmailService;
+import stersectas.application.email.Email;
+import stersectas.application.email.EmailService;
 
 public class EmailServiceStub implements EmailService {
 
-	private SimpleMailMessage lastEmail = null;
+	private Email lastEmail = null;
 
 	@Override
-	public void send(SimpleMailMessage email) {
+	public void send(Email email) {
 		System.out.println("EmailStub received order to send mail: " + email);
 		lastEmail = email;
 	}
 
-	public SimpleMailMessage getLastEmail() {
+	public Email getLastEmail() {
 		return lastEmail;
 	}
 

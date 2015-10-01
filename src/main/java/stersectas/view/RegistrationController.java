@@ -1,5 +1,6 @@
 package stersectas.view;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
-	public String registerUser(@Valid RegisterUser registerUser, BindingResult bindingResult) {
+	public String registerUser(@Valid RegisterUser registerUser, BindingResult bindingResult, HttpServletRequest request) {
 		if (!bindingResult.hasErrors()) {
-			userService.registerNewUser(registerUser);
+			userService.registerNewUser(registerUser, request);
 			return "redirect:/registration-complete";
 		}
 		return "registration";
