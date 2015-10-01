@@ -1,5 +1,7 @@
 package stersectas.application.email;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -8,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
+import org.thymeleaf.context.Context;
 
 import stersectas.application.VerificationToken;
 import stersectas.domain.User;
@@ -44,16 +46,23 @@ public class VerificationEmailService {
 		String to = user.getEmail();
 		String subject = messageSource.getMessage(SUBJECT_MESSAGE_KEY, null, "Registration Confirmation",
 				request.getLocale());
-		String content = createContent(verificationToken, request);
+		String content = createContent(verificationToken, baseUrl(request), request.getLocale());
 
 		emailService.send(new Email(to, subject, content));
 	}
 
-	public String createContent(VerificationToken verificationToken, HttpServletRequest request) {
-		final WebContext context = new WebContext(request, null, request.getServletContext(), request.getLocale());
+	public String createContent(VerificationToken verificationToken, String baseUrl, Locale locale) {
+		final Context context = new Context(locale);
+		context.setVariable("baseUrl", baseUrl);
 		context.setVariable("username", verificationToken.getUser().getUsername());
 		context.setVariable("token", verificationToken.tokenString());
 		return templateEngine.process("email/verification", context);
+	}
+
+	// currently not testing with context, should test to see if that still works with context
+	private String baseUrl(HttpServletRequest request) {
+		StringBuffer requestUrl = request.getRequestURL();
+		return requestUrl.substring(0, requestUrl.length() - request.getRequestURI().length());
 	}
 
 }

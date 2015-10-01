@@ -34,7 +34,7 @@ public class EmailConfiguration {
 		mailSenderImpl.setPort(env.getProperty("smtp.port", Integer.class));
 		mailSenderImpl.setProtocol(env.getProperty("smtp.protocol"));
 		mailSenderImpl.setUsername(env.getProperty("smtp.user"));
-		mailSenderImpl.setPassword(System.getenv("STERSECTAS_EMAIL_PASSWORD"));
+		mailSenderImpl.setPassword(env.getProperty("STERSECTAS_EMAIL_PASSWORD"));
 
 		javaMailProps.put("mail.smtp.auth", "true");
 		javaMailProps.put("mail.smtp.starttls.enable", "true");

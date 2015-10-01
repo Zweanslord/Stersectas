@@ -5,10 +5,13 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	</head>
 	<body>
-		<h2 th:text="#{email.register.verification.description(${username})}">Email verification</h2>
-		<p th:text="${username}">
+		<h2 th:text="#{email.register.verification}">Email verification</h2>
+		<p th:text="#{email.register.verification.description(${username})}">
 			TestUser, thank you for registering! Below you will find a link to verify your e-mail for your newly created account. Afterwards you can log into Stersectas!
 		</p>
-		<a th:href="@{/registration-confirmation(token=${token})}" th:title="#{email.register.verification.link}"><strong th:text="#{email.register.verification.link}">Verify your email!</strong></a>
+		<p>
+			<span th:text="#{email.register.verification.link}" th:remove="tag">Verify your email</span>:
+			<a th:href="|${baseUrl}/registration-confirmation?token=${token}|" th:title="#{email.register.verification.link}" th:text="|${baseUrl}/registration-confirmation?token=${token}|">http://localhost/confirmation</a>
+		</p>
 	</body>
 </html>
