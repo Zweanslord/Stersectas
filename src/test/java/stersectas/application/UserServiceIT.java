@@ -20,6 +20,7 @@ import stersectas.domain.User;
 import stersectas.repositories.UserRepository;
 import stersectas.stub.EmailServiceStub;
 import stersectas.stub.TimeTravellingClock;
+import stersectas.stub.VerificationTokenLookupService;
 
 public class UserServiceIT extends BaseIT {
 
@@ -34,6 +35,9 @@ public class UserServiceIT extends BaseIT {
 
 	@Autowired
 	private EmailServiceStub emailServiceStub;
+
+	@Autowired
+	private VerificationTokenLookupService verificationTokenLookupService;
 
 	@Test
 	@Transactional
@@ -59,8 +63,9 @@ public class UserServiceIT extends BaseIT {
 	@Transactional
 	public void confirmRegistrationImmediately() {
 		userService.registerNewUser(createRegisterUser("test-user"));
+		String token = findToken("test-user");
 
-		boolean confirmation = userService.confirmEmailVerification("test-token");
+		boolean confirmation = userService.confirmEmailVerification(token);
 		User user = userRepository.findByUsername("test-user").get();
 
 		assertTrue(confirmation);
@@ -75,6 +80,10 @@ public class UserServiceIT extends BaseIT {
 		return registerUser;
 	}
 
+	private String findToken(String userName) {
+		return verificationTokenLookupService.findEmailVerificationTokenForUsername("test-user").get().tokenString();
+	}
+
 	@Test
 	@Transactional
 	public void confirmRegistrationAnHourLater() {
@@ -83,7 +92,7 @@ public class UserServiceIT extends BaseIT {
 		userService.registerNewUser(createRegisterUser("test-user"));
 
 		clock.travelThroughTimeTo(dateTime.plusHours(1));
-		boolean confirmation = userService.confirmEmailVerification("test-token");
+		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
 		User user = userRepository.findByUsername("test-user").get();
 
 		assertTrue(confirmation);
@@ -98,7 +107,7 @@ public class UserServiceIT extends BaseIT {
 		userService.registerNewUser(createRegisterUser("test-user"));
 
 		clock.travelThroughTimeTo(dateTime.plusDays(1).plusSeconds(1));
-		boolean confirmation = userService.confirmEmailVerification("test-token");
+		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
 		User user = userRepository.findByUsername("test-user").get();
 
 		assertFalse(confirmation);
@@ -108,7 +117,7 @@ public class UserServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void createInitialUser() {
-		userService.initializeUsers();
+		userService.initializeUser();
 		User initialUser = userRepository.findByUsername("initial").get();
 		assertEquals("initial", initialUser.getUsername());
 		assertTrue(initialUser.isEnabled());
@@ -120,7 +129,7 @@ public class UserServiceIT extends BaseIT {
 		registerAndEnableAUser();
 		assertFalse(userRepository.findByUsername("initial").isPresent());
 
-		userService.initializeUsers();
+		userService.initializeUser();
 
 		assertFalse(userRepository.findByUsername("initial").isPresent());
 	}
@@ -142,7 +151,7 @@ public class UserServiceIT extends BaseIT {
 		registerInitialUser();
 		assertFalse(userRepository.findByUsername("initial").get().isEnabled());
 
-		userService.initializeUsers();
+		userService.initializeUser();
 
 		User initialUser = userRepository.findByUsername("initial").get();
 		assertEquals("initial", initialUser.getUsername());

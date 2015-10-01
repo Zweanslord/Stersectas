@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import stersectas.SecurityConfiguration;
+import stersectas.configuration.SecurityConfiguration;
 import stersectas.domain.Role;
 import stersectas.domain.User;
 import stersectas.repositories.UserRepository;

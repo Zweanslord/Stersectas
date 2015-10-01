@@ -1,4 +1,4 @@
-package stersectas;
+package stersectas.configuration;
 
 import java.util.Properties;
 
@@ -10,8 +10,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import stersectas.configuration.profile.DefaultProfile;
+
 @Configuration
 @PropertySource("classpath:email.properties")
+@DefaultProfile
 public class EmailConfiguration {
 
 	@Autowired

@@ -22,7 +22,7 @@ public class VerificationToken {
 	private Long id;
 
 	@Embedded
-	private Token token;
+	private RandomToken token;
 
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
@@ -30,21 +30,26 @@ public class VerificationToken {
 
 	private LocalDateTime expirationTime;
 
+	/** Hibernate constructor */
 	protected VerificationToken() {
 	}
 
-	public VerificationToken(Token token, User user, LocalDateTime now) {
+	private VerificationToken(RandomToken token, User user, LocalDateTime now) {
 		this.token = token;
 		this.user = user;
 		expirationTime = now.plusDays(EXPIRATION_DAYS);
 	}
 
-	public Long getId() {
-		return id;
+	public static VerificationToken create(User user, LocalDateTime now) {
+		return new VerificationToken(RandomToken.create(), user, now);
 	}
 
-	public Token getToken() {
-		return token;
+	public String tokenString() {
+		return token.toString();
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public User getUser() {

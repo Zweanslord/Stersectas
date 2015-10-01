@@ -1,27 +1,37 @@
 package stersectas.application;
 
+import java.util.UUID;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Token {
+public class RandomToken {
 
 	private String token;
 
-	protected Token() {
+	protected RandomToken() {
 	}
 
-	public Token(String token) {
+	protected RandomToken(String token) {
 		this.token = token;
+	}
+
+	public static RandomToken create() {
+		return new RandomToken(UUID.randomUUID().toString());
+	}
+
+	public static RandomToken from(String token) {
+		return new RandomToken(token);
 	}
 
 	@Override
 	public boolean equals(Object object) {
 		if (object == null
-				|| !(object instanceof Token)) {
+				|| !(object instanceof RandomToken)) {
 			return false;
 		}
 
-		Token other = (Token) object;
+		RandomToken other = (RandomToken) object;
 		return token.equals(other.token);
 	}
 

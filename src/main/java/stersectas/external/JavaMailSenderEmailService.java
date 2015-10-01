@@ -7,8 +7,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import stersectas.application.EmailService;
+import stersectas.configuration.profile.DefaultProfile;
 
 @Service(value = "emailService")
+@DefaultProfile
 public class JavaMailSenderEmailService implements EmailService {
 
 	private final JavaMailSender mailSender;
@@ -18,7 +20,6 @@ public class JavaMailSenderEmailService implements EmailService {
 		this.mailSender = mailSender;
 	}
 
-	// TODO: make sending mail async to prevent long wait times on user side
 	// TODO: Use MimeMessage rather than SimpleMailMessage
 	@Override
 	@Async

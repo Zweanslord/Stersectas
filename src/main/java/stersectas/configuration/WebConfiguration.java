@@ -1,4 +1,4 @@
-package stersectas;
+package stersectas.configuration;
 
 import java.util.Locale;
 

@@ -22,12 +22,12 @@ public class UserService {
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
 	private static final String INITIAL_USERNAME = "initial";
+	private static final String TEST_USERNAME = "test";
 
 	private final UserRepository userRepository;
 	private final VerificationTokenRepository tokenRepository;
 	private final EmailService emailService;
 	private final PasswordEncoder encoder;
-	private final TokenGenerator tokenGenerator;
 	private final Clock clock;
 
 	@Autowired
@@ -35,93 +35,52 @@ public class UserService {
 			VerificationTokenRepository tokenRepository,
 			EmailService emailService,
 			PasswordEncoder encoder,
-			TokenGenerator tokenGenerator,
 			Clock clock) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.emailService = emailService;
 		this.encoder = encoder;
-		this.tokenGenerator = tokenGenerator;
 		this.clock = clock;
 	}
 
-	@Transactional
-	public void initializeUsers() {
-		if (noEnabledUsersExist()) {
-			ensureInitialUserIsPresentAndEnabled();
-			addTestUser();
-		}
-	}
-
-	private boolean noEnabledUsersExist() {
-		return userRepository.findByEnabledTrue().isEmpty();
-	}
-
-	private void ensureInitialUserIsPresentAndEnabled() {
-		Optional<User> optionalUser = userRepository.findByUsername(INITIAL_USERNAME);
-		if (optionalUser.isPresent()) {
-			ensureUserIsEnabledAndAdministrator(optionalUser.get());
-		} else {
-			createInitialUser();
-		}
-	}
-
-	private void ensureUserIsEnabledAndAdministrator(User user) {
-		if (user.isDisabled()) {
-			user.enable();
-		}
-		user.promoteToAdministrator();
-	}
-
-	private void createInitialUser() {
-		log.info("Creating initial user.");
-		User user = new User(
-				INITIAL_USERNAME,
-				"test@test.com",
-				encoder.encode("password"));
-		user.enable();
-		user.promoteToAdministrator();
-		userRepository.save(user);
-	}
-
-	// TODO should be removed when it is possible to run on local development without mailing
-	// or when testing profile can be enabled
-	private void addTestUser() {
-		User user = new User(
-				"test",
-				"test@test.com",
-				encoder.encode("password"));
-		user.enable();
-		userRepository.save(user);
-	}
-
-	@Transactional
 	public void registerNewUser(RegisterUser registerUser) {
-		User user = userRepository.save(new User(
+		User user = registerUser(registerUser);
+		sendEmailVerification(user);
+	}
+
+	@Transactional
+	private User registerUser(RegisterUser registerUser) {
+		return userRepository.save(new User(
 				registerUser.getUsername(),
 				registerUser.getEmail(),
 				encoder.encode(registerUser.getPassword())));
+	}
 
-		Token token = tokenGenerator.generateToken();
-		tokenRepository.save(new VerificationToken(token, user, LocalDateTime.now(clock)));
+	@Transactional
+	private void sendEmailVerification(User user) {
+		VerificationToken verificationToken = VerificationToken.create(user, LocalDateTime.now(clock));
 
-		sendEmailVerification(user, token);
+		tokenRepository.save(verificationToken);
+
+		sendEmailVerification(user, verificationToken);
 	}
 
 	// TODO: make this method work for all email confirmations (registration or changing email)
 	// TODO: make this method agnostic to the domain address
 	// TODO: internationalization
-	public void sendEmailVerification(User user, Token token) {
+	public void sendEmailVerification(User user, VerificationToken verificationToken) {
+		log.info("Sending verification token %s to %s for registration of %s",
+				verificationToken.tokenString(), user.getEmail(), user.getUsername());
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setTo(user.getEmail());
 		email.setSubject("Registration Confirmation");
-		email.setText("http://localhost:8080/registration-confirmation?token=" + token.toString());
+		email.setText("http://localhost:8080/registration-confirmation?token=" + verificationToken.tokenString());
 		emailService.send(email);
 	}
 
 	@Transactional
 	public boolean confirmEmailVerification(String tokenString) {
-		Optional<VerificationToken> optionalToken = tokenRepository.findByToken(new Token(tokenString));
+		Optional<VerificationToken> optionalToken = tokenRepository.findByToken(RandomToken.from(tokenString));
 		if (!optionalToken.isPresent()) {
 			return false;
 		}
@@ -157,6 +116,57 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username).get();
+	}
+
+	@Transactional
+	public void initializeUser() {
+		if (noEnabledUsersExist()) {
+			ensureInitialUserIsPresentAndEnabled();
+		}
+	}
+
+	private boolean noEnabledUsersExist() {
+		return userRepository.countByEnabledTrue() == 0;
+	}
+
+	private void ensureInitialUserIsPresentAndEnabled() {
+		Optional<User> optionalUser = userRepository.findByUsername(INITIAL_USERNAME);
+		if (optionalUser.isPresent()) {
+			ensureUserIsEnabledAndAdministrator(optionalUser.get());
+		} else {
+			createInitialUser();
+		}
+	}
+
+	private void ensureUserIsEnabledAndAdministrator(User user) {
+		if (user.isDisabled()) {
+			user.enable();
+		}
+		user.promoteToAdministrator();
+	}
+
+	private void createInitialUser() {
+		log.info("Creating initial user.");
+		User user = new User(
+				INITIAL_USERNAME,
+				"test@test.com",
+				encoder.encode("password"));
+		user.enable();
+		user.promoteToAdministrator();
+		userRepository.save(user);
+	}
+
+	@Transactional
+	public void initialiseTestUser() {
+		Optional<User> optionalUser = userRepository.findByUsername(TEST_USERNAME);
+		if (!optionalUser.isPresent()) {
+			User user = new User(
+					TEST_USERNAME,
+					"test@test.com",
+					encoder.encode("password"));
+			user.enable();
+			userRepository.save(user);
+		}
 	}
 
 }

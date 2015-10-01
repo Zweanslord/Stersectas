@@ -1,23 +1,28 @@
-package stersectas;
+package stersectas.configuration;
 
 import java.time.Clock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import stersectas.application.EmailService;
-import stersectas.application.TokenGenerator;
+import stersectas.configuration.profile.TestingProfile;
 import stersectas.stub.EmailServiceStub;
 import stersectas.stub.TimeTravellingClock;
-import stersectas.stub.TokenGeneratorStub;
 
 @Configuration
-public class TestConfiguration {
+@TestingProfile
+public class StubConfiguration {
+
+	private static final Logger log = LoggerFactory.getLogger(StubConfiguration.class);
 
 	@Bean
 	@Primary
 	public Clock stubbedClock() {
+		log.info("Using timetravelling clock.");
 		return new TimeTravellingClock();
 	}
 
@@ -25,12 +30,6 @@ public class TestConfiguration {
 	@Primary
 	public EmailService stubbedEmailService() {
 		return new EmailServiceStub();
-	}
-
-	@Bean
-	@Primary
-	public TokenGenerator stubbedTokenGenerator() {
-		return new TokenGeneratorStub();
 	}
 
 }

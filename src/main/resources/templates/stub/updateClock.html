@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Update clock</title>
+	</head>
+	<body>
+		<form th:action="@{updateclock}" method="post">
+			<p>
+				<label for="dateTime">Travel through time for development. Format example: 2015-09-10T16:21:07</label>
+			</p>
+			<input id="dateTime" type="text" name="dateTime" th:value="${dateTime}"></input>
+			<button>Timetravel!</button>
+		</form>
+	</body>
+</html>
