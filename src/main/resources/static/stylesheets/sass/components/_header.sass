@@ -12,3 +12,30 @@ header
 		
 	> a
 		font-size: $font-size-base * 2
+		
+	nav
+	
+		ul
+			margin: 0
+			padding: 0
+			list-style-type: none
+				
+			li
+				display: inline-block
+				
+				a
+					display: inline-block
+					padding: $default-whitespace / 2
+					
+				&:first-child a
+					padding-left: 0
+				
+					
+		a, a:link, a:visited
+			letter-spacing: 1px
+				
+			&:link, &:visited
+				color: $font-color-dim
+			
+			&:focus, &:hover
+				color: $font-color-light

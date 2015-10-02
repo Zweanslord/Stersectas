@@ -7,8 +7,8 @@
 		<title>Stersectas Intro</title>
 	</head>
 	<body>
-		<header role="banner" layout:fragment="header">
-			<h1><a th:href="@{/}" href="/">Stersectas</a></h1>
+		<header role="banner">
+			<h1 layout:fragment="logo"><a th:href="@{/}" href="/">Stersectas</a></h1>
 		</header>
 		<main layout:fragment="main">
 			<h2 th:text="#{welcome}">Welcome!</h2>

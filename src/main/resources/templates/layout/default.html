@@ -2,12 +2,28 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title layout:title-pattern="$CONTENT_TITLE">Layout Template</title>
 		<link th:href="@{/stylesheets/css/main.css}" media="all" rel="stylesheet" />
+		<title layout:title-pattern="$CONTENT_TITLE">Layout Template</title>
 	</head>
 	<body>
-		<header role="banner" layout:fragment="header">
-			<a th:href="@{/}" href="/">Stersectas</a>
+		<header role="banner">
+			<a th:href="@{/}" href="/" layout:fragment="logo">Stersectas</a>
+			<nav>
+				<ul>
+					<li>
+						<a href="/">Navigation</a>
+					</li>
+					<li>
+						<a href="/">For</a>
+					</li>
+					<li>
+						<a href="/">Testing</a>
+					</li>
+					<li>
+						<a href="/">Purposes</a>
+					</li>
+				</ul>
+			</nav>
 		</header>
 		<main layout:fragment="main">
 			<h1 th:text="${layout.resultingTitle}">Page title</h1>
