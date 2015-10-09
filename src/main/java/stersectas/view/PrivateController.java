@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PrivateController {
 
-	@RequestMapping("/private/")
+	@RequestMapping("/private")
 	public String privateSection(ModelMap model) {
 		return "private/private";
 	}

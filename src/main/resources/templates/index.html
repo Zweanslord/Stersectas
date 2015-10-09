@@ -17,11 +17,11 @@
 				<a th:href="@{/registration}" th:text="#{user.register}">Register</a>
 			</p>
 			<p>
-				<a th:href="@{/private/}">Let's move on to a private section.</a>
+				<a th:href="@{/private}">Let's move on to a private section.</a>
 			</p>
 			<p sec:authorize="hasRole('ROLE_ADMIN')">
 				This is only visible to administrators.
-				<a th:href="@{/admin/}">Let's move on to the administration section.</a>
+				<a th:href="@{/admin}">Let's move on to the administration section.</a>
 			</p>
 		</main>
 	</body>
