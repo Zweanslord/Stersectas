@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import stersectas.application.UserService;
-import stersectas.domain.User;
+import stersectas.application.user.UserService;
+import stersectas.domain.user.User;
 
 @RequestMapping
 @Controller

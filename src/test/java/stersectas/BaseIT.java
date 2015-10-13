@@ -9,8 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import stersectas.configuration.profile.TestingProfile;
-import stersectas.stub.TimeTravellingClock;
+import stersectas.external.stub.TimeTravellingClock;
+import stersectas.profile.TestingProfile;
 
 /**
  * Super class for Integration Tests (ITs) allowing them to make use of the application configuration, database, etc.

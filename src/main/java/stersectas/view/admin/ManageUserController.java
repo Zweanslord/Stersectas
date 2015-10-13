@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import stersectas.application.UserService;
+import stersectas.application.user.UserService;
 
 @RequestMapping
 @Controller

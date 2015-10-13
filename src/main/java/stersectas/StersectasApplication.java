@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.thymeleaf.util.ArrayUtils;
 
-import stersectas.application.UserService;
-import stersectas.configuration.profile.TestingProfile;
+import stersectas.application.user.UserService;
+import stersectas.profile.TestingProfile;
 
 @SpringBootApplication
 @EnableAsync

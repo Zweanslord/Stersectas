@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import stersectas.application.VerificationToken;
-import stersectas.domain.User;
+import stersectas.domain.token.VerificationToken;
+import stersectas.domain.user.User;
 
 @Service
 public class VerificationEmailService {
