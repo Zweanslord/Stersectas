@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
+import stersectas.documentation.HibernateConstructor;
+
 @Entity
 public class User {
 
@@ -31,6 +33,7 @@ public class User {
 
 	private Role role;
 
+	@HibernateConstructor
 	protected User() {
 	}
 
