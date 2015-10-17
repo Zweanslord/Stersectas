@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import stersectas.domain.user.UserId;
+
 public class GameTest {
 
 	@Test
@@ -12,12 +14,15 @@ public class GameTest {
 				new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new Master("owner"));
+				new Master(
+						new UserId("1234567890"),
+						new Name("owner")));
 
 		assertEquals(GameState.PREPARING, game.state());
 		assertEquals(new Name("Test-Game"), game.name());
 		assertEquals(new Description("A game made for testing purposes"), game.description());
 		assertEquals(new MaximumPlayers(4), game.maximumPlayers());
+		assertEquals(new Master(new UserId("1234567890"), new Name("owner")), game.master());
 	}
 
 	@Test

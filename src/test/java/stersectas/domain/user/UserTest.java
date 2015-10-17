@@ -5,13 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import stersectas.domain.user.User;
-
 public class UserTest {
-
-	private static User createTestUser() {
-		return new User("test", "test@test.com", "password");
-	}
 
 	@Test
 	public void enableUser() {
@@ -93,6 +87,14 @@ public class UserTest {
 		user.demoteToUser();
 
 		assertFalse(user.isAdministrator());
+	}
+
+	private static User createTestUser() {
+		return new User(
+				new UserId("12345678901234567890"),
+				"test",
+				"test@test.com",
+				"password");
 	}
 
 }

@@ -1,12 +1,16 @@
 package stersectas.domain.game;
 
+import stersectas.domain.user.UserId;
+
 public class GameTestBuilder {
 
 	public static Game createPreparingTestGame() {
 		return new Game(new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new Master("owner"));
+				new Master(
+						new UserId("0123456789"),
+						new Name("owner")));
 	}
 
 	public static Game createRecruitingTestGame() {

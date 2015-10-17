@@ -1,9 +1,10 @@
 package stersectas.domain.game;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 import stersectas.documentation.HibernateConstructor;
+import stersectas.domain.user.UserId;
 
 /**
  * Non-organizing participant in a {@link Game}.
@@ -11,23 +12,45 @@ import stersectas.documentation.HibernateConstructor;
 @Embeddable
 public class Player {
 
-	// TODO same question as Master, should this be a user's name or id?
-	@Column(nullable = false)
-	private String player;
+	@Embedded
+	private UserId userId;
+
+	@Embedded
+	private Name name;
 
 	@HibernateConstructor
-	Player() {
+	protected Player() {
 	}
 
-	Player(String player) {
-		if (player == null || player.trim().isEmpty()) {
-			throw new IllegalArgumentException("Name can not be empty.");
+	Player(UserId userId, Name name) {
+		this.userId = userId;
+		this.name = name;
+	}
+
+	public UserId userId() {
+		return userId;
+	}
+
+	public Name name() {
+		return name;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		final boolean result;
+		if (object instanceof Player) {
+			final Player other = (Player) object;
+			result = userId.equals(other.userId)
+					&& name.equals(other.name);
+		} else {
+			result = false;
 		}
-		this.player = player;
+		return result;
 	}
 
-	public String name() {
-		return player;
+	@Override
+	public int hashCode() {
+		return userId.hashCode() + name.hashCode();
 	}
 
 }

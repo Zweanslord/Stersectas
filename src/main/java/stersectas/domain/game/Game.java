@@ -1,5 +1,7 @@
 package stersectas.domain.game;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -28,6 +30,10 @@ public class Game {
 	private MaximumPlayers maximumPlayers;
 
 	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "userId.id", column = @Column(name = "masterId", nullable = false, unique = true)),
+			@AttributeOverride(name = "name.name", column = @Column(name = "masterName", nullable = false))
+	})
 	private Master master;
 
 	@Column(nullable = false)
@@ -105,9 +111,12 @@ public class Game {
 		return maximumPlayers;
 	}
 
+	public Master master() {
+		return master;
+	}
+
 	public GameState state() {
 		return state;
 	}
-
 
 }

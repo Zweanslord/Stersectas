@@ -1,9 +1,10 @@
 package stersectas.domain.game;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 import stersectas.documentation.HibernateConstructor;
+import stersectas.domain.user.UserId;
 
 /**
  * Organizer and manager of a {@link Game}.
@@ -11,24 +12,45 @@ import stersectas.documentation.HibernateConstructor;
 @Embeddable
 public class Master {
 
-	// TODO String used here, should this really be (user)name or an id?
-	// We don't want the full user, to stay only loosely coupled.
-	@Column(nullable = false)
-	private String master;
+	@Embedded
+	private UserId userId;
+
+	@Embedded
+	private Name name;
 
 	@HibernateConstructor
 	protected Master() {
 	}
 
-	Master(String master) {
-		if (master == null || master.trim().isEmpty()) {
-			throw new IllegalArgumentException("Name can not be empty.");
-		}
-		this.master = master;
+	Master(UserId userId, Name name) {
+		this.userId = userId;
+		this.name = name;
 	}
 
-	public String name() {
-		return master;
+	public UserId userId() {
+		return userId;
+	}
+
+	public Name name() {
+		return name;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		final boolean result;
+		if (object instanceof Master) {
+			final Master other = (Master) object;
+			result = userId.equals(other.userId)
+					&& name.equals(other.name);
+		} else {
+			result = false;
+		}
+		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return userId.hashCode() + name.hashCode();
 	}
 
 }

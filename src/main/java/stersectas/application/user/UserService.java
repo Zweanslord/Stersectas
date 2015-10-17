@@ -58,6 +58,7 @@ public class UserService {
 	@Transactional
 	private User registerUser(RegisterUser registerUser) {
 		return userRepository.save(new User(
+				userRepository.nextIdentity(),
 				registerUser.getUsername(),
 				registerUser.getEmail(),
 				encoder.encode(registerUser.getPassword())));
@@ -141,6 +142,7 @@ public class UserService {
 	private void createInitialUser() {
 		log.info("Creating initial user.");
 		User user = new User(
+				userRepository.nextIdentity(),
 				INITIAL_USERNAME,
 				"test@test.com",
 				encoder.encode("password"));
@@ -155,6 +157,7 @@ public class UserService {
 		Optional<User> optionalUser = userRepository.findByUsername(TEST_USERNAME);
 		if (!optionalUser.isPresent()) {
 			User user = new User(
+					userRepository.nextIdentity(),
 					TEST_USERNAME,
 					"test@test.com",
 					encoder.encode("password"));

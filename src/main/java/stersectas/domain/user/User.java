@@ -1,9 +1,8 @@
 package stersectas.domain.user;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -13,9 +12,8 @@ import stersectas.documentation.HibernateConstructor;
 @Entity
 public class User {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+	@EmbeddedId
+	private UserId userId;
 
 	@Size(min = 3, max = 30)
 	@Column(nullable = false, unique = true)
@@ -37,7 +35,8 @@ public class User {
 	protected User() {
 	}
 
-	public User(String username, String email, String password) {
+	public User(UserId userId, String username, String email, String password) {
+		this.userId = userId;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -69,6 +68,10 @@ public class User {
 
 	public boolean isAdministrator() {
 		return role == Role.ADMIN;
+	}
+
+	public UserId getUserId() {
+		return userId;
 	}
 
 	public String getUsername() {
