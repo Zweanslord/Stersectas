@@ -1,11 +1,11 @@
 package stersectas.domain.game;
 
 /**
- * The different phases of a {@link Game}, ordered by their most logical chronological order.
+ * The different phases of a {@link RecruitingGame}, ordered by their most logical chronological order.
  *
  */
+// FIXME Use in Game? Or delete.
 public enum GameState {
-	PREPARING,
 	RECRUITING,
 	RUNNING,
 	FINISHED,

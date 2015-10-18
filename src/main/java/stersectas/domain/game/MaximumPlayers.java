@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import stersectas.documentation.HibernateConstructor;
 
 /**
- * Total number of {@link Player}s which the {@link Master} can accommodate in a specific {@link Game}.
+ * Total number of {@link Player}s which the {@link Master} can accommodate in a specific {@link RecruitingGame}.
  */
 @Embeddable
 public class MaximumPlayers {
