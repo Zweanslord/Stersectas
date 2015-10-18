@@ -3,8 +3,7 @@ package stersectas.domain.game;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.EmbeddedId;
 import javax.persistence.MappedSuperclass;
 
 import stersectas.documentation.HibernateConstructor;
@@ -13,9 +12,8 @@ import stersectas.domain.user.UserId;
 @MappedSuperclass
 public abstract class Game {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+	@EmbeddedId
+	private GameId gameId;
 
 	@Embedded
 	private Name name;
@@ -35,10 +33,12 @@ public abstract class Game {
 	}
 
 	protected Game(
+			GameId gameId,
 			Name name,
 			Description description,
 			MaximumPlayers maximumPlayers,
 			UserId masterId) {
+		this.gameId = gameId;
 		this.name = name;
 		this.description = description;
 		this.maximumPlayers = maximumPlayers;
@@ -55,6 +55,10 @@ public abstract class Game {
 
 	protected void adjustMaximumOfPlayers(MaximumPlayers maximumPlayers) {
 		this.maximumPlayers = maximumPlayers;
+	}
+
+	public GameId gameId() {
+		return gameId;
 	}
 
 	public Name name() {

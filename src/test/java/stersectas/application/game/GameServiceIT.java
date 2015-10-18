@@ -1,6 +1,7 @@
 package stersectas.application.game;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import javax.transaction.Transactional;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import stersectas.BaseIT;
 import stersectas.application.security.SecurityService;
 import stersectas.application.user.UserService;
+import stersectas.domain.game.ArchivedGame;
+import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
 import stersectas.domain.user.User;
@@ -26,6 +29,9 @@ public class GameServiceIT extends BaseIT {
 	private RecruitingGameRepository recruitingGameRepository;
 
 	@Autowired
+	private ArchivedGameRepository archivedGameRepository;
+
+	@Autowired
 	private UserService userService;
 
 	@Before
@@ -36,7 +42,10 @@ public class GameServiceIT extends BaseIT {
 		securityService = Mockito.mock(SecurityService.class);
 		Mockito.when(securityService.currentUser()).thenReturn(testUser);
 
-		gameService = new GameService(securityService, recruitingGameRepository);
+		gameService = new GameService(
+				securityService,
+				recruitingGameRepository,
+				archivedGameRepository);
 	}
 
 	@Test
@@ -54,6 +63,33 @@ public class GameServiceIT extends BaseIT {
 		assertEquals("Description", game.description().description());
 		assertEquals(2, game.maximumPlayers().maximum());
 		assertEquals(userService.findByUsername("test").getUserId(), game.masterId());
+	}
+
+	@Test
+	@Transactional
+	public void archiveGame() {
+		RecruitingGame recruitingGame = createRecruitingGame("test-game");
+
+		ArchiveGame archiveGame = new ArchiveGame();
+		archiveGame.setGameId(recruitingGame.gameId().id());
+
+		gameService.archiveGame(archiveGame);
+
+		ArchivedGame archivedGame = gameService.findArchivedGameByName("test-game");
+		assertEquals(recruitingGame.gameId().id(), archivedGame.gameId().id());
+
+		assertNull(gameService.findRecruitingGameByName("test-game"));
+	}
+
+	private RecruitingGame createRecruitingGame(String name) {
+		CreateGame createGame = new CreateGame();
+		createGame.setName(name);
+		createGame.setDescription("Description");
+		createGame.setMaximumPlayers(2);
+
+		gameService.createGame(createGame);
+
+		return gameService.findRecruitingGameByName(name);
 	}
 
 }

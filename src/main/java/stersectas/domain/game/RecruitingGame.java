@@ -22,11 +22,13 @@ public class RecruitingGame extends Game {
 	// private Set<UserId> players;
 
 	public RecruitingGame(
+			GameId gameId,
 			Name name,
 			Description description,
 			MaximumPlayers maximumPlayers,
 			UserId masterId) {
-		super(name,
+		super(gameId,
+				name,
 				description,
 				maximumPlayers,
 				masterId);
@@ -55,6 +57,7 @@ public class RecruitingGame extends Game {
 
 	public ArchivedGame archive() {
 		return new ArchivedGame(
+				gameId(),
 				name(),
 				description(),
 				maximumPlayers(),
