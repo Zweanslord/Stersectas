@@ -8,9 +8,7 @@ public class GameTestBuilder {
 		return new Game(new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new Master(
-						new UserId("0123456789"),
-						new Name("owner")));
+				new UserId("0123456789"));
 	}
 
 	public static Game createRecruitingTestGame() {

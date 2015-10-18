@@ -1,7 +1,6 @@
 package stersectas.domain.game;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -9,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import stersectas.documentation.HibernateConstructor;
+import stersectas.domain.user.UserId;
 
 /**
  * A story where multiple participants can play the events and adventure together.
@@ -30,11 +30,8 @@ public class Game {
 	private MaximumPlayers maximumPlayers;
 
 	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "userId.id", column = @Column(name = "masterId", nullable = false, unique = true)),
-			@AttributeOverride(name = "name.name", column = @Column(name = "masterName", nullable = false))
-	})
-	private Master master;
+	@AttributeOverride(name = "id", column = @Column(name = "masterId", nullable = false, unique = true))
+	private UserId masterId;
 
 	@Column(nullable = false)
 	private GameState state;
@@ -46,13 +43,13 @@ public class Game {
 	// TODO add players
 	// @ElementCollection
 	// @CollectionTable
-	// private Set<Player> players;
+	// private Set<UserId> players;
 
-	public Game(Name name, Description description, MaximumPlayers maximumPlayers, Master master) {
+	public Game(Name name, Description description, MaximumPlayers maximumPlayers, UserId master) {
 		this.name = name;
 		this.description = description;
 		this.maximumPlayers = maximumPlayers;
-		this.master = master;
+		masterId = master;
 		// players = new HashSet<>();
 		state = GameState.PREPARING;
 	}
@@ -111,8 +108,8 @@ public class Game {
 		return maximumPlayers;
 	}
 
-	public Master master() {
-		return master;
+	public UserId masterId() {
+		return masterId;
 	}
 
 	public GameState state() {

@@ -14,15 +14,13 @@ public class GameTest {
 				new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new Master(
-						new UserId("1234567890"),
-						new Name("owner")));
+				new UserId("1234567890"));
 
 		assertEquals(GameState.PREPARING, game.state());
 		assertEquals(new Name("Test-Game"), game.name());
 		assertEquals(new Description("A game made for testing purposes"), game.description());
 		assertEquals(new MaximumPlayers(4), game.maximumPlayers());
-		assertEquals(new Master(new UserId("1234567890"), new Name("owner")), game.master());
+		assertEquals(new UserId("1234567890"), game.masterId());
 	}
 
 	@Test
