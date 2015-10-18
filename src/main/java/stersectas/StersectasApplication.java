@@ -26,7 +26,6 @@ public class StersectasApplication {
 		if (hasTestingProfile(context)) {
 			userService.initialiseTestUser();
 		}
-
 	}
 
 	private static boolean hasTestingProfile(ApplicationContext context) {

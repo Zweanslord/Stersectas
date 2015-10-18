@@ -17,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import stersectas.BaseIT;
 import stersectas.application.email.Email;
-import stersectas.application.user.RegisterUser;
-import stersectas.application.user.UserService;
 import stersectas.domain.user.User;
 import stersectas.domain.user.UserRepository;
 import stersectas.external.stub.EmailServiceStub;
@@ -55,7 +53,7 @@ public class UserServiceIT extends BaseIT {
 		userService.registerNewUser(registerUser, REQUEST);
 		Email email = emailServiceStub.getLastEmail();
 
-		User testUser = userRepository.findByUsername("test-user").get();
+		User testUser = userService.findByUsername("test-user");
 		assertEquals("test-user", testUser.getUsername());
 		assertNotEquals("12345", testUser.getPassword());
 		assertTrue(new BCryptPasswordEncoder().matches("12345", testUser.getPassword()));
@@ -71,7 +69,7 @@ public class UserServiceIT extends BaseIT {
 		String token = findToken("test-user");
 
 		boolean confirmation = userService.confirmEmailVerification(token);
-		User user = userRepository.findByUsername("test-user").get();
+		User user = userService.findByUsername("test-user");
 
 		assertTrue(confirmation);
 		assertTrue(user.isEnabled());
@@ -98,7 +96,7 @@ public class UserServiceIT extends BaseIT {
 
 		clock.travelThroughTimeTo(dateTime.plusHours(1));
 		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
-		User user = userRepository.findByUsername("test-user").get();
+		User user = userService.findByUsername("test-user");
 
 		assertTrue(confirmation);
 		assertTrue(user.isEnabled());
@@ -113,7 +111,7 @@ public class UserServiceIT extends BaseIT {
 
 		clock.travelThroughTimeTo(dateTime.plusDays(1).plusSeconds(1));
 		boolean confirmation = userService.confirmEmailVerification(findToken("test-user"));
-		User user = userRepository.findByUsername("test-user").get();
+		User user = userService.findByUsername("test-user");
 
 		assertFalse(confirmation);
 		assertFalse(user.isEnabled());
@@ -123,7 +121,7 @@ public class UserServiceIT extends BaseIT {
 	@Transactional
 	public void createInitialUser() {
 		userService.initializeUser();
-		User initialUser = userRepository.findByUsername("initial").get();
+		User initialUser = userService.findByUsername("initial");
 		assertEquals("initial", initialUser.getUsername());
 		assertTrue(initialUser.isEnabled());
 	}
@@ -145,7 +143,7 @@ public class UserServiceIT extends BaseIT {
 		registerUser.setEmail("test@test.com");
 		registerUser.setPassword("12345");
 		userService.registerNewUser(registerUser, REQUEST);
-		User user = userRepository.findByUsername("test-user").get();
+		User user = userService.findByUsername("test-user");
 		user.enable();
 		userRepository.save(user);
 	}
@@ -154,11 +152,11 @@ public class UserServiceIT extends BaseIT {
 	@Transactional
 	public void initialiseWithDisabledInitialUser() {
 		registerInitialUser();
-		assertFalse(userRepository.findByUsername("initial").get().isEnabled());
+		assertFalse(userService.findByUsername("initial").isEnabled());
 
 		userService.initializeUser();
 
-		User initialUser = userRepository.findByUsername("initial").get();
+		User initialUser = userService.findByUsername("initial");
 		assertEquals("initial", initialUser.getUsername());
 		assertTrue(initialUser.isEnabled());
 	}
@@ -177,7 +175,7 @@ public class UserServiceIT extends BaseIT {
 		registerAndEnableAUser();
 		userService.promoteUserToAdministrator("test-user");
 
-		User user = userRepository.findByUsername("test-user").get();
+		User user = userService.findByUsername("test-user");
 		assertTrue(user.isAdministrator());
 	}
 
