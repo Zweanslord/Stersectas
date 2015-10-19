@@ -10,11 +10,10 @@ import stersectas.domain.user.User;
 @Service
 public class SecurityService {
 
-	private UserService userService;
+	private final UserService userService;
 
 	@Autowired
-	public SecurityService(
-			UserService userService) {
+	public SecurityService(UserService userService) {
 		this.userService = userService;
 	}
 

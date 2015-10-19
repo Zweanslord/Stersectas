@@ -55,6 +55,7 @@ public class RecruitingGame extends Game {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public ArchivedGame archive() {
 		return new ArchivedGame(
 				gameId(),

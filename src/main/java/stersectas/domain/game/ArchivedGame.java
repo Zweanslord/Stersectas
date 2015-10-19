@@ -25,4 +25,14 @@ public class ArchivedGame extends Game {
 				masterId);
 	}
 
+	@Override
+	public ArchivedGame archive() {
+		return new ArchivedGame(
+				gameId(),
+				name(),
+				description(),
+				maximumPlayers(),
+				masterId());
+	}
+
 }

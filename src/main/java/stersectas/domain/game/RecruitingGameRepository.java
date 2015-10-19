@@ -1,5 +1,6 @@
 package stersectas.domain.game;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RecruitingGameRepository {
@@ -10,9 +11,9 @@ public interface RecruitingGameRepository {
 
 	public RecruitingGame save(RecruitingGame recruitingGame);
 
-	public RecruitingGame findByName(Name name);
+	public Optional<RecruitingGame> findByName(Name name);
 
-	public RecruitingGame findByGameId(GameId gameId);
+	public Optional<RecruitingGame> findByGameId(GameId gameId);
 
 	public void delete(RecruitingGame recruitingGame);
 

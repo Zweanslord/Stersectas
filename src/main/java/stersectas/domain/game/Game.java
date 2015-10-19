@@ -4,12 +4,16 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 import stersectas.documentation.HibernateConstructor;
 import stersectas.domain.user.UserId;
 
-@MappedSuperclass
+// @MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Game {
 
 	@EmbeddedId
@@ -56,6 +60,8 @@ public abstract class Game {
 	protected void adjustMaximumOfPlayers(MaximumPlayers maximumPlayers) {
 		this.maximumPlayers = maximumPlayers;
 	}
+
+	public abstract ArchivedGame archive();
 
 	public GameId gameId() {
 		return gameId;
