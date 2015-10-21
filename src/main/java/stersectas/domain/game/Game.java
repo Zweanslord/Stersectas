@@ -49,7 +49,7 @@ public abstract class Game {
 		this.masterId = masterId;
 	}
 
-	protected void changeName(Name name) {
+	protected void rename(Name name) {
 		this.name = name;
 	}
 

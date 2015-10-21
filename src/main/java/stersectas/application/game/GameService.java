@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import stersectas.application.security.SecurityService;
 import stersectas.domain.game.ArchivedGame;
 import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.Description;
@@ -15,22 +14,20 @@ import stersectas.domain.game.MaximumPlayers;
 import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
+import stersectas.domain.user.UserId;
 
 @Service
 public class GameService {
 
-	private final SecurityService securityService;
 	private final GameRepository gameRepository;
 	private final RecruitingGameRepository recruitingGameRepository;
 	private final ArchivedGameRepository archivedGameRepository;
 
 	@Autowired
 	public GameService(
-			SecurityService securityService,
 			GameRepository gameRepository,
 			RecruitingGameRepository recruitingGameRepository,
 			ArchivedGameRepository archivedGameRepository) {
-		this.securityService = securityService;
 		this.gameRepository = gameRepository;
 		this.recruitingGameRepository = recruitingGameRepository;
 		this.archivedGameRepository = archivedGameRepository;
@@ -43,12 +40,20 @@ public class GameService {
 				new Name(createGame.getName()),
 				new Description(createGame.getDescription()),
 				new MaximumPlayers(createGame.getMaximumPlayers()),
-				securityService.currentUser().getUserId()));
+				new UserId(createGame.getMasterId())));
 	}
 
 	@Transactional(readOnly = true)
 	public RecruitingGame findRecruitingGameByName(String name) {
 		return recruitingGameRepository.findByName(new Name(name)).get();
+	}
+
+	@Transactional
+	public void renameGame(RenameGame renameGame) {
+		// recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get()
+		// .rename(new Name(renameGame.getName()));
+		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get();
+		recruitingGame.rename(new Name(renameGame.getName()));
 	}
 
 	@Transactional

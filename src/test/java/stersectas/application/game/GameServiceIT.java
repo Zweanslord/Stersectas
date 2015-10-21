@@ -7,24 +7,21 @@ import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import stersectas.BaseIT;
-import stersectas.application.security.SecurityService;
 import stersectas.application.user.UserService;
 import stersectas.domain.game.ArchivedGame;
 import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.GameRepository;
+import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
-import stersectas.domain.user.User;
+import stersectas.domain.user.UserId;
 
 public class GameServiceIT extends BaseIT {
 
 	private GameService gameService;
-
-	private SecurityService securityService;
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -40,14 +37,7 @@ public class GameServiceIT extends BaseIT {
 
 	@Before
 	public void setUp() {
-		userService.initialiseTestUser();
-		User testUser = userService.findByUsername("test");
-
-		securityService = Mockito.mock(SecurityService.class);
-		Mockito.when(securityService.currentUser()).thenReturn(testUser);
-
 		gameService = new GameService(
-				securityService,
 				gameRepository,
 				recruitingGameRepository,
 				archivedGameRepository);
@@ -60,6 +50,7 @@ public class GameServiceIT extends BaseIT {
 		createGame.setName("Test-game");
 		createGame.setDescription("Description");
 		createGame.setMaximumPlayers(2);
+		createGame.setMasterId("0123456789");
 
 		gameService.createGame(createGame);
 
@@ -67,60 +58,70 @@ public class GameServiceIT extends BaseIT {
 		assertEquals("Test-game", game.name().name());
 		assertEquals("Description", game.description().description());
 		assertEquals(2, game.maximumPlayers().maximum());
-		assertEquals(userService.findByUsername("test").getUserId(), game.masterId());
+		assertEquals(new UserId("0123456789"), game.masterId());
+	}
+
+	@Test
+	@Transactional
+	public void renameGame() {
+		RecruitingGame recruitingGame = createRecruitingGame();
+		RenameGame renameGame = new RenameGame();
+		renameGame.setGameId(recruitingGame.gameId().id());
+		renameGame.setName("Renamed");
+
+		gameService.renameGame(renameGame);
+
+		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		assertEquals(new Name("Renamed"), updatedGame.name());
 	}
 
 	@Test
 	@Transactional
 	public void archiveRecruitingGame() {
-		RecruitingGame recruitingGame = createRecruitingGame("test-game");
-
+		RecruitingGame recruitingGame = createRecruitingGame();
 		ArchiveGame archiveGame = new ArchiveGame();
 		archiveGame.setGameId(recruitingGame.gameId().id());
 
 		gameService.archiveGame(archiveGame);
 
-		ArchivedGame archivedGame = gameService.findArchivedGameByName("test-game");
+		ArchivedGame archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
 		assertEquals(recruitingGame.gameId().id(), archivedGame.gameId().id());
-
-		try {
-			gameService.findRecruitingGameByName("test-game");
-			fail();
-		} catch (Exception e) {
-		}
+		assertCannotFindGame(recruitingGame.name().name());
 	}
 
 	@Test
 	@Transactional
 	public void archiveArchivedGame() {
-		RecruitingGame recruitingGame = createRecruitingGame("test-game");
-
+		RecruitingGame recruitingGame = createRecruitingGame();
 		ArchiveGame archiveGame = new ArchiveGame();
 		archiveGame.setGameId(recruitingGame.gameId().id());
 
 		gameService.archiveGame(archiveGame);
-
 		gameService.archiveGame(archiveGame);
 
-		ArchivedGame archivedGame = gameService.findArchivedGameByName("test-game");
+		ArchivedGame archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
 		assertEquals(recruitingGame.gameId().id(), archivedGame.gameId().id());
-
-		try {
-			gameService.findRecruitingGameByName("test-game");
-			fail();
-		} catch (Exception e) {
-		}
+		assertCannotFindGame(recruitingGame.name().name());
 	}
 
-	private RecruitingGame createRecruitingGame(String name) {
+	private RecruitingGame createRecruitingGame() {
 		CreateGame createGame = new CreateGame();
-		createGame.setName(name);
+		createGame.setName("test-game");
 		createGame.setDescription("Description");
 		createGame.setMaximumPlayers(2);
+		createGame.setMasterId("0123456789");
 
 		gameService.createGame(createGame);
 
-		return gameService.findRecruitingGameByName(name);
+		return gameService.findRecruitingGameByName("test-game");
+	}
+
+	private void assertCannotFindGame(String gameName) {
+		try {
+			gameService.findRecruitingGameByName(gameName);
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 }

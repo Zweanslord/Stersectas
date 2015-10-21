@@ -27,7 +27,7 @@ public class RecruitingGameTest {
 
 	@Test
 	public void adjustMaximumOfPlayers() {
-		RecruitingGame game = GameTestBuilder.createRecruitingTestGame();
+		RecruitingGame game = GameTestCreator.createRecruitingGame();
 
 		game.adjustMaximumOfPlayers(new MaximumPlayers(2));
 
@@ -35,17 +35,17 @@ public class RecruitingGameTest {
 	}
 
 	@Test
-	public void changeName() {
-		RecruitingGame game = GameTestBuilder.createRecruitingTestGame();
+	public void rename() {
+		RecruitingGame game = GameTestCreator.createRecruitingGame();
 
-		game.changeName(new Name("Another Name"));
+		game.rename(new Name("Another Name"));
 
 		assertEquals(new Name("Another Name"), game.name());
 	}
 
 	@Test
 	public void changeDescription() {
-		RecruitingGame game = GameTestBuilder.createRecruitingTestGame();
+		RecruitingGame game = GameTestCreator.createRecruitingGame();
 
 		game.changeDescription(new Description("Another Description"));
 

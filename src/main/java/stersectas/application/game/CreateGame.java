@@ -17,6 +17,8 @@ public class CreateGame {
 	@Max(8)
 	private int maximumPlayers;
 
+	private String masterId;
+
 	public CreateGame() {
 
 	}
@@ -43,6 +45,14 @@ public class CreateGame {
 
 	public void setMaximumPlayers(int maximumPlayers) {
 		this.maximumPlayers = maximumPlayers;
+	}
+
+	public String getMasterId() {
+		return masterId;
+	}
+
+	public void setMasterId(String masterId) {
+		this.masterId = masterId;
 	}
 
 }

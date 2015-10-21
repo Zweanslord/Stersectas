@@ -2,9 +2,9 @@ package stersectas.domain.game;
 
 import stersectas.domain.user.UserId;
 
-public class GameTestBuilder {
+public class GameTestCreator {
 
-	public static RecruitingGame createRecruitingTestGame() {
+	public static RecruitingGame createRecruitingGame() {
 		return new RecruitingGame(
 				new GameId("0123456789"),
 				new Name("Test-Game"),
@@ -13,8 +13,8 @@ public class GameTestBuilder {
 				new UserId("0123456789"));
 	}
 
-	public static ArchivedGame createArchivedTestGame() {
-		RecruitingGame game = createRecruitingTestGame();
+	public static ArchivedGame createArchivedGame() {
+		RecruitingGame game = createRecruitingGame();
 		return game.archive();
 	}
 

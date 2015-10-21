@@ -41,8 +41,8 @@ public class RecruitingGame extends Game {
 	}
 
 	@Override
-	public void changeName(Name name) {
-		super.changeName(name);
+	public void rename(Name name) {
+		super.rename(name);
 	}
 
 	@Override
