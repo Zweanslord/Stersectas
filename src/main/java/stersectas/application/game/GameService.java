@@ -68,4 +68,9 @@ public class GameService {
 		return archivedGameRepository.findByName(new Name(name)).get();
 	}
 
+	@Transactional(readOnly = true)
+	public boolean isGameNameAvailable(String gameName) {
+		return !gameRepository.findByName(new Name(gameName)).isPresent();
+	}
+
 }

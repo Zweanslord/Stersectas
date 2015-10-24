@@ -104,6 +104,8 @@ public class GameServiceIT extends BaseIT {
 		assertCannotFindGame(recruitingGame.name().name());
 	}
 
+
+
 	private RecruitingGame createRecruitingGame() {
 		CreateGame createGame = new CreateGame();
 		createGame.setName("test-game");
