@@ -50,10 +50,25 @@ public class GameService {
 
 	@Transactional
 	public void renameGame(RenameGame renameGame) {
+		// TODO check if this works too
 		// recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get()
 		// .rename(new Name(renameGame.getName()));
 		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get();
 		recruitingGame.rename(new Name(renameGame.getName()));
+	}
+
+	@Transactional
+	public void changeGamePlayerMaximum(ChangeGamePlayerMaximum changeGamePlayerMaximum) {
+		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(
+				new GameId(changeGamePlayerMaximum.getGameId())).get();
+		recruitingGame.adjustMaximumOfPlayers(new MaximumPlayers(changeGamePlayerMaximum.getMaximumPlayers()));
+	}
+
+	@Transactional
+	public void changeGameDescription(ChangeGameDescription changeGameDescription) {
+		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(
+				new GameId(changeGameDescription.getGameId())).get();
+		recruitingGame.changeDescription(new Description(changeGameDescription.getDescription()));
 	}
 
 	@Transactional

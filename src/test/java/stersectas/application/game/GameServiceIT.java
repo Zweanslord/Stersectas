@@ -13,7 +13,9 @@ import stersectas.BaseIT;
 import stersectas.application.user.UserService;
 import stersectas.domain.game.ArchivedGame;
 import stersectas.domain.game.ArchivedGameRepository;
+import stersectas.domain.game.Description;
 import stersectas.domain.game.GameRepository;
+import stersectas.domain.game.MaximumPlayers;
 import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
@@ -73,6 +75,34 @@ public class GameServiceIT extends BaseIT {
 
 		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new Name("Renamed"), updatedGame.name());
+	}
+
+	@Test
+	@Transactional
+	public void changeGamePlayerMaximum() {
+		RecruitingGame recruitingGame = createRecruitingGame();
+		ChangeGamePlayerMaximum changeGamePlayerMaximum = new ChangeGamePlayerMaximum();
+		changeGamePlayerMaximum.setGameId(recruitingGame.gameId().id());
+		changeGamePlayerMaximum.setMaximumPlayers(1);
+
+		gameService.changeGamePlayerMaximum(changeGamePlayerMaximum);
+
+		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		assertEquals(new MaximumPlayers(1), updatedGame.maximumPlayers());
+	}
+
+	@Test
+	@Transactional
+	public void changeGameDescription() {
+		RecruitingGame recruitingGame = createRecruitingGame();
+		ChangeGameDescription changeGameDescription = new ChangeGameDescription();
+		changeGameDescription.setGameId(recruitingGame.gameId().id());
+		changeGameDescription.setDescription("Changed Description");
+
+		gameService.changeGameDescription(changeGameDescription);
+
+		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		assertEquals(new Description("Changed Description"), updatedGame.description());
 	}
 
 	@Test
