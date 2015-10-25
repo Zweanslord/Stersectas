@@ -5,6 +5,12 @@ import java.util.UUID;
 
 public interface UserRepository {
 
+	default UserId nextIdentity() {
+		return new UserId(UUID.randomUUID().toString().toUpperCase());
+	}
+
+	Optional<User> findByUserId(UserId userId);
+
 	Optional<User> findByUsername(String username);
 
 	Long countByEnabledTrue();
@@ -12,9 +18,5 @@ public interface UserRepository {
 	User save(User user);
 
 	Iterable<User> findAll();
-
-	default UserId nextIdentity() {
-		return new UserId(UUID.randomUUID().toString().toUpperCase());
-	}
 
 }

@@ -11,6 +11,9 @@
 			<nav>
 				<ul>
 					<li>
+						<a th:href="@{/game/recruiting}" href="/game/recruiting">Games</a>
+					</li>
+					<li>
 						<a href="/">Navigation</a>
 					</li>
 					<li>
@@ -27,7 +30,7 @@
 		</header>
 		<main layout:fragment="main">
 			<h1 th:text="${layout.resultingTitle}">Page title</h1>
-			<section layout:fragment="content">Content</section>
+			<div layout:fragment="content">Content</div>
 		</main>
 		<footer role="contentinfo">
 			<p th:text="#{footer}"></p>

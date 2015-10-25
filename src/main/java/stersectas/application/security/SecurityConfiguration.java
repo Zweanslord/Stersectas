@@ -38,6 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.expressionHandler(webExpressionHandler())
 				.antMatchers("/private", "/private/**").authenticated()
+				.antMatchers("/member", "/member/**").authenticated()
 				.antMatchers("/admin", "/admin/**").hasRole(Role.ADMIN.name())
 				.and()
 			.formLogin()

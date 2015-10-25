@@ -1,5 +1,7 @@
 package stersectas.application.game;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +88,11 @@ public class GameService {
 	@Transactional(readOnly = true)
 	public boolean isGameNameAvailable(String gameName) {
 		return !gameRepository.findByName(new Name(gameName)).isPresent();
+	}
+
+	@Transactional(readOnly = true)
+	public List<RecruitingGame> findAllRecruitingGames() {
+		return recruitingGameRepository.findAllByOrderByNameAsc();
 	}
 
 }

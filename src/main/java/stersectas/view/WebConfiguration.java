@@ -28,7 +28,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		messageSource.setBasenames(
 				"i18n/common",
 				"i18n/user",
-				"i18n/email");
+				"i18n/email",
+				"i18n/game");
 		messageSource.setFallbackToSystemLocale(false);
 		return messageSource;
 	}

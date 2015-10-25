@@ -22,7 +22,7 @@ public class CreateGame {
 	private String masterId;
 
 	public CreateGame() {
-
+		maximumPlayers = 4;
 	}
 
 	public String getName() {

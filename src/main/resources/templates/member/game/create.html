@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title  th:text="#{game.create}">Create Game</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form th:action="@{create}" method="post" th:object="${createGame}">
+				<p>
+					<label>
+						<span th:text="#{name}">Name</span>
+						<input type="text" th:field="*{name}" required="required" maxlength="30"/>
+					</label>
+					<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+				</p>
+				<p>
+					<label>
+						<span th:text="#{game.maximumPlayers}">Maximum players (1-8)</span>
+						<input type="number" th:field="*{maximumPlayers}" required="required" min="1" max="8"/>
+					</label>
+					<div th:if="${#fields.hasErrors('maximumPlayers')}" th:errors="*{maximumPlayers}">Maximum players error</div>
+				</p>
+				<p>
+					<label>
+						<span th:text="#{description}">Description</span>
+						<textarea th:field="*{description}" required="required" maxlength="1000"></textarea>
+					</label>
+					<div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
+				</p>
+				<button type="submit" th:text="#{game.create}">Create Game</button>
+			</form>
+		</div>
+	</body>
+</html>

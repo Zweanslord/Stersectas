@@ -27,6 +27,7 @@ public class UserService {
 
 	private static final String INITIAL_USERNAME = "initial";
 	private static final String TEST_USERNAME = "test";
+	private static final String START_PASSWORD = "password";
 
 	private final UserRepository userRepository;
 	private final VerificationTokenRepository tokenRepository;
@@ -145,7 +146,7 @@ public class UserService {
 				userRepository.nextIdentity(),
 				INITIAL_USERNAME,
 				"test@test.com",
-				encoder.encode("password"));
+				encoder.encode(START_PASSWORD));
 		user.enable();
 		user.promoteToAdministrator();
 		userRepository.save(user);
@@ -160,7 +161,7 @@ public class UserService {
 					userRepository.nextIdentity(),
 					TEST_USERNAME,
 					"test@test.com",
-					encoder.encode("password"));
+					encoder.encode(START_PASSWORD));
 			user.enable();
 			userRepository.save(user);
 		}
