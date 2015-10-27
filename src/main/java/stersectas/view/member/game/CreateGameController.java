@@ -27,13 +27,13 @@ public class CreateGameController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createForm(Model model) {
+	public String createGameForm(Model model) {
 		model.addAttribute("createGame", new CreateGame());
 		return "member/game/create";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String registerUser(@Validated(AllValidations.class) CreateGame createGame, BindingResult bindingResult) {
+	public String createGame(@Validated(AllValidations.class) CreateGame createGame, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
 			createGame(createGame);
 			return "redirect:/game/recruiting";
