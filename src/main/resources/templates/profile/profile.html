@@ -8,22 +8,21 @@
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<h2>Account Details</h2>
 			<table>
 				<tr>
-					<td></td>
 					<td th:text="#{user.name}">Name</td>
 					<td th:text="${user.username}"></td>
+					<td></td>
 				</tr>
 				<tr>
-					<td></td>
 					<td th:text="#{user.email}">Email</td>
 					<td th:text="${user.email}"></td>
+					<td></td>
 				</tr>
 				<tr>
-					<td><a th:href="@{/profile/password}">Edit</a></td>
 					<td th:text="#{user.password}">Password</td>
 					<td></td>
+					<td><a th:href="@{/profile/password}" th:text="#{user.profile.change}">change</a></td>
 				</tr>
 			</table>
 		</div>

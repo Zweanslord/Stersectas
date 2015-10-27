@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public interface UserRepository {
 
+	Optional<User> findByUserId(UserId userId);
+
 	Optional<User> findByUsername(String username);
 
 	Long countByEnabledTrue();

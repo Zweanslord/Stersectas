@@ -14,14 +14,14 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordsMatc
 
 	@Override
 	public boolean isValid(PasswordConfirmation passwordConfirmation, ConstraintValidatorContext context) {
-		if (!passwordConfirmation.getPassword().equals(passwordConfirmation.getPasswordConfirmation())) {
+		if (passwordConfirmation.getPassword().equals(passwordConfirmation.getPasswordConfirmation())) {
+			return true;
+		} else {
 			context
 				.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
 					.addPropertyNode("passwordConfirmation")
 						.addConstraintViolation();
 			return false;
-		} else {
-			return true;
 		}
 	}
 }

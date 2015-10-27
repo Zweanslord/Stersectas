@@ -9,11 +9,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import stersectas.application.validation.validator.PasswordMatchValidator;
+import stersectas.application.validation.validator.PasswordValidValidator;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PasswordMatchValidator.class)
+@Constraint(validatedBy = PasswordValidValidator.class)
 @Documented
 public @interface PasswordValid {
 

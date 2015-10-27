@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import stersectas.BaseIT;
 import stersectas.application.email.Email;
 import stersectas.domain.user.User;
+import stersectas.domain.user.UserId;
 import stersectas.domain.user.UserRepository;
 import stersectas.external.stub.EmailServiceStub;
 import stersectas.external.stub.TimeTravellingClock;
@@ -187,19 +188,11 @@ public class UserServiceIT extends BaseIT {
 	@Transactional
 	public void setNewPassword() {
 		registerAndEnableAUser();
-		UpdateUserPassword updateUserPassword = setUpdateUserPassword("test-user", "password", "12345");
-		userService.updateUserPassword(updateUserPassword);
+		UserId userId = userService.findByUsername("test-user").getUserId();
+		userService.updateUserPassword(userId, "12345");
 
 		User user = userService.findByUsername("test-user");
 		assertTrue(encoder.matches("12345", user.getPassword()));
-	}
-
-	private UpdateUserPassword setUpdateUserPassword(String username, String currentPassword, String password) {
-		UpdateUserPassword updateUserPassword = new UpdateUserPassword(username);
-		updateUserPassword.setCurrentPassword(currentPassword);
-		updateUserPassword.setPassword(password);
-		updateUserPassword.setPasswordConfirmation(password);
-		return updateUserPassword;
 	}
 
 }

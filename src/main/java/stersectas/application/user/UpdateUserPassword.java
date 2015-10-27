@@ -9,8 +9,6 @@ import stersectas.application.validation.PasswordsMatch;
 @PasswordsMatch
 public class UpdateUserPassword implements PasswordConfirmation {
 
-	private String username;
-
 	private String currentPassword;
 
 	@Size(min = 8, max = 100)
@@ -19,14 +17,6 @@ public class UpdateUserPassword implements PasswordConfirmation {
 	private String passwordConfirmation;
 
 	public UpdateUserPassword() {
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getCurrentPassword() {

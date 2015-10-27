@@ -29,22 +29,17 @@ public class EditPasswordController {
 
 	@RequestMapping(value = "/profile/password", method = RequestMethod.GET)
 	public String editPasswordForm(Model model) {
-		User user = securityService.currentUser();
-
-		UpdateUserPassword updateUserPassword = new UpdateUserPassword();
-		updateUserPassword.setUsername(user.getUsername());
-
-		model.addAttribute("updateUserPassword", updateUserPassword);
-
+		model.addAttribute("updateUserPassword", new UpdateUserPassword());
 		return "profile/password";
 	}
 
 	@RequestMapping(value = "/profile/password", method = RequestMethod.POST)
 	public String updatePassword(@Valid UpdateUserPassword updateUserPassword, BindingResult bindingResult) {
-		if (!bindingResult.hasErrors()) {
-			userService.updateUserPassword(updateUserPassword);
-			return "redirect:profile/profile";
+		if (bindingResult.hasErrors()) {
+			return "/profile/password";
 		}
-		return "profile/password";
+		User user = securityService.currentUser();
+		userService.updateUserPassword(user.getUserId(), updateUserPassword.getPassword());
+		return "redirect:/profile";
 	}
 }

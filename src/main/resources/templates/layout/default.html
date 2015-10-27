@@ -10,8 +10,8 @@
 			<a th:href="@{/}" href="/" layout:fragment="logo">Stersectas</a>
 			<nav>
 				<ul>
-					<li>
-						<a href="/">Navigation</a>
+					<li sec:authorize="isAuthenticated()">
+						<a th:href="@{/profile}" th:text="#{user.profile}">Profile</a>
 					</li>
 					<li>
 						<a href="/">For</a>
