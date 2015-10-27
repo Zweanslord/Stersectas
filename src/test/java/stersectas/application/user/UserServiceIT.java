@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import stersectas.BaseIT;
 import stersectas.application.email.Email;
@@ -29,6 +30,9 @@ public class UserServiceIT extends BaseIT {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private PasswordEncoder encoder;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -177,6 +181,25 @@ public class UserServiceIT extends BaseIT {
 
 		User user = userService.findByUsername("test-user");
 		assertTrue(user.isAdministrator());
+	}
+
+	@Test
+	@Transactional
+	public void setNewPassword() {
+		registerAndEnableAUser();
+		UpdateUserPassword updateUserPassword = setUpdateUserPassword("test-user", "password", "12345");
+		userService.updateUserPassword(updateUserPassword);
+
+		User user = userService.findByUsername("test-user");
+		assertTrue(encoder.matches("12345", user.getPassword()));
+	}
+
+	private UpdateUserPassword setUpdateUserPassword(String username, String currentPassword, String password) {
+		UpdateUserPassword updateUserPassword = new UpdateUserPassword(username);
+		updateUserPassword.setCurrentPassword(currentPassword);
+		updateUserPassword.setPassword(password);
+		updateUserPassword.setPasswordConfirmation(password);
+		return updateUserPassword;
 	}
 
 }

@@ -86,6 +86,13 @@ public class User {
 		return password;
 	}
 
+	public void setPassword(String password) {
+		if (isDisabled()) {
+			throw new IllegalStateException("Can't demote disabled user");
+		}
+		this.password = password;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}

@@ -102,6 +102,13 @@ public class UserService {
 		user.demoteToUser();
 	}
 
+	@Transactional
+	public void updateUserPassword(UpdateUserPassword updateUserPassword) {
+		User user = userRepository.findByUsername(updateUserPassword.getUsername()).get();
+		String encodedPassword = encoder.encode(updateUserPassword.getPassword());
+		user.setPassword(encodedPassword);
+	}
+
 	@Transactional(readOnly = true)
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll();

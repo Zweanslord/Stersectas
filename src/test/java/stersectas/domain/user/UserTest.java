@@ -8,9 +8,18 @@ import org.junit.Test;
 public class UserTest {
 
 	@Test
+	public void newUserIsDisabled() {
+		User user = createTestUser();
+
+		assertTrue(user.isDisabled());
+		assertFalse(user.isEnabled());
+	}
+
+	@Test
 	public void enableUser() {
 		User user = createTestUser();
 		user.enable();
+
 		assertTrue(user.isEnabled());
 		assertFalse(user.isDisabled());
 	}
@@ -20,6 +29,7 @@ public class UserTest {
 		User user = createTestUser();
 		user.enable();
 		user.enable();
+
 		assertTrue(user.isEnabled());
 		assertFalse(user.isDisabled());
 	}
@@ -29,6 +39,7 @@ public class UserTest {
 		User user = createTestUser();
 		user.enable();
 		user.disable();
+
 		assertTrue(user.isDisabled());
 		assertFalse(user.isEnabled());
 	}
@@ -37,6 +48,7 @@ public class UserTest {
 	public void disableDisabledUser() {
 		User user = createTestUser();
 		user.disable();
+
 		assertTrue(user.isDisabled());
 		assertFalse(user.isEnabled());
 	}
@@ -52,6 +64,7 @@ public class UserTest {
 		User user = createTestUser();
 		user.enable();
 		user.promoteToAdministrator();
+
 		assertTrue(user.isAdministrator());
 	}
 
@@ -61,6 +74,7 @@ public class UserTest {
 		user.enable();
 		user.promoteToAdministrator();
 		user.promoteToAdministrator();
+
 		assertTrue(user.isAdministrator());
 	}
 
@@ -87,6 +101,21 @@ public class UserTest {
 		user.demoteToUser();
 
 		assertFalse(user.isAdministrator());
+	}
+
+	@Test
+	public void setNewPassword() {
+		User user = createTestUser();
+		user.enable();
+		user.setPassword("12345");
+
+		assertTrue("12345".equals(user.getPassword()));
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void cannotSetPasswordOfDisabledUser() {
+		User user = createTestUser();
+		user.setPassword("12345");
 	}
 
 	private static User createTestUser() {
