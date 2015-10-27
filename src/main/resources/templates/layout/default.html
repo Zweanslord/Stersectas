@@ -17,7 +17,8 @@
 						<a th:href="@{/game/recruiting}" href="/game/recruiting">Games</a>
 					</li>
 					<li>
-						<a th:href="@{/login}" th:text="#{login}">Login</a>
+						<a sec:authorize="isAnonymous()" th:href="@{/login}" th:text="#{login}">Login</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/logout}" th:text="#{logout}">Logout</a>
 					</li>
 				</ul>
 			</nav>
