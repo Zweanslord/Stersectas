@@ -18,6 +18,7 @@ import stersectas.domain.token.RandomToken;
 import stersectas.domain.token.VerificationToken;
 import stersectas.domain.token.VerificationTokenRepository;
 import stersectas.domain.user.User;
+import stersectas.domain.user.UserId;
 import stersectas.domain.user.UserRepository;
 
 @Service
@@ -101,6 +102,13 @@ public class UserService {
 	public void demoteUserToUser(String username) {
 		User user = userRepository.findByUsername(username).get();
 		user.demoteToUser();
+	}
+
+	@Transactional
+	public void updateUserPassword(UserId userId, String plainPassword) {
+		User user = userRepository.findByUserId(userId).get();
+		String encodedPassword = encoder.encode(plainPassword);
+		user.setPassword(encodedPassword);
 	}
 
 	@Transactional(readOnly = true)

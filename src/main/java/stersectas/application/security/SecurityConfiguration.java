@@ -39,6 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.expressionHandler(webExpressionHandler())
 				.antMatchers("/private", "/private/**").authenticated()
 				.antMatchers("/member", "/member/**").authenticated()
+				.antMatchers("/profile", "/profile/**").authenticated()
 				.antMatchers("/admin", "/admin/**").hasRole(Role.ADMIN.name())
 				.and()
 			.formLogin()

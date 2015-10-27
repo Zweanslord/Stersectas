@@ -8,7 +8,7 @@ import stersectas.application.validation.PasswordsMatch;
 import stersectas.application.validation.UsernameAvailable;
 
 @PasswordsMatch
-public class RegisterUser {
+public class RegisterUser implements PasswordConfirmation {
 
 	@Size(min = 3, max = 30)
 	@UsernameAvailable
@@ -20,7 +20,6 @@ public class RegisterUser {
 	@Size(min = 8, max = 100)
 	private String password;
 
-	@Size(min = 8, max = 100)
 	private String passwordConfirmation;
 
 	public RegisterUser() {
@@ -34,10 +33,12 @@ public class RegisterUser {
 		return email;
 	}
 
+	@Override
 	public String getPassword() {
 		return password;
 	}
 
+	@Override
 	public String getPasswordConfirmation() {
 		return passwordConfirmation;
 	}

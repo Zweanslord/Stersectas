@@ -10,20 +10,14 @@
 			<a th:href="@{/}" href="/" layout:fragment="logo">Stersectas</a>
 			<nav>
 				<ul>
+					<li sec:authorize="isAuthenticated()">
+						<a th:href="@{/profile}" th:text="#{user.profile}">Profile</a>
+					</li>
 					<li>
 						<a th:href="@{/game/recruiting}" href="/game/recruiting">Games</a>
 					</li>
 					<li>
-						<a href="/">Navigation</a>
-					</li>
-					<li>
-						<a href="/">For</a>
-					</li>
-					<li>
-						<a href="/">Testing</a>
-					</li>
-					<li>
-						<a href="/">Purposes</a>
+						<a th:href="@{/login}" th:text="#{login}">Login</a>
 					</li>
 				</ul>
 			</nav>
