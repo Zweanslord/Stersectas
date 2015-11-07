@@ -19,7 +19,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="game : ${games}">
-						<td th:text="${game.name}">To the Stars</td>
+						<td><a th:href="@{/game/{id}(id=${game.gameId})}" th:text="${game.name}">To the Stars</a></td>
 						<td th:text="${game.maximumPlayers}">4</td>
 						<td th:text="${game.masterName}">Copernicus</td>
 					</tr>

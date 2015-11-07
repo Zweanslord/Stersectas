@@ -3,19 +3,18 @@ package stersectas.application.game;
 import stersectas.domain.game.Game;
 import stersectas.domain.game.Name;
 
-/**
- * A Data Transfer Object (DTO) used for the view to show a list of games.
- */
-public class ListedGame {
+public class DetailedGame {
 
 	private final String gameId;
 	private final String name;
+	private final String description;
 	private final int maximumPlayers;
 	private final String masterName;
 
-	ListedGame(Game game, Name masterName) {
+	DetailedGame(Game game, Name masterName) {
 		gameId = game.gameId().id();
 		name = game.name().name();
+		description = game.description().description();
 		maximumPlayers = game.maximumPlayers().maximum();
 		this.masterName = masterName.name();
 	}
@@ -26,6 +25,10 @@ public class ListedGame {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public int getMaximumPlayers() {

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title th:text="${game.name}">Star voyagers</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span><br/>
+			<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong> <span th:text="${game.maximumPlayers}">4</span>
+			<p th:text="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</p>
+		</div>
+	</body>
+</html>
