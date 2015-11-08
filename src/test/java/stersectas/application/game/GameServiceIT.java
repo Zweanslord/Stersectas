@@ -67,9 +67,7 @@ public class GameServiceIT extends BaseIT {
 	@Transactional
 	public void renameGame() {
 		RecruitingGame recruitingGame = createRecruitingGame();
-		RenameGame renameGame = new RenameGame();
-		renameGame.setGameId(recruitingGame.gameId().id());
-		renameGame.setName("Renamed");
+		RenameGame renameGame = new RenameGame(recruitingGame.gameId().id(), "Renamed");
 
 		gameService.renameGame(renameGame);
 

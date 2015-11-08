@@ -1,4 +1,4 @@
-package stersectas.application.game;
+package stersectas.view;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import stersectas.BaseIT;
+import stersectas.application.game.CreateGame;
+import stersectas.application.game.GameService;
 import stersectas.application.validation.AllValidations;
 import stersectas.domain.game.RecruitingGame;
+import stersectas.view.member.game.RenameGameForm;
 
-public class RenameGameIT extends BaseIT {
+public class RenameGameFormIT extends BaseIT {
 
 	@Autowired
 	private Validator validator;
@@ -25,40 +28,24 @@ public class RenameGameIT extends BaseIT {
 
 	@Test
 	public void validGameName() {
-		RenameGame renameGame = new RenameGame();
-		renameGame.setName("test-game");
-		renameGame.setGameId("0123456789");
+		RenameGameForm renameGameForm = new RenameGameForm();
+		renameGameForm.setName("test-game");
 
-		Set<ConstraintViolation<RenameGame>> constraintViolations = validator
-				.validate(renameGame, AllValidations.class);
+		Set<ConstraintViolation<RenameGameForm>> constraintViolations = validator
+				.validate(renameGameForm, AllValidations.class);
 		assertEquals(0, constraintViolations.size());
 	}
 
 	@Test
 	@Transactional
-	public void invalidGameName() {
-		RenameGame renameGame = new RenameGame();
-		renameGame.setName("");
-		renameGame.setGameId("0123456789");
-
-		Set<ConstraintViolation<RenameGame>> constraintViolations = validator
-				.validate(renameGame, AllValidations.class);
-		assertEquals(1, constraintViolations.size());
-		assertEquals("size must be between 1 and 30", constraintViolations.iterator().next().getMessage());
-		assertEquals("", constraintViolations.iterator().next().getInvalidValue());
-	}
-
-	@Test
-	@Transactional
 	public void alreadyTakenGameName() {
-		RecruitingGame recruitingGame = createGameWithName("test-game");
+		createGameWithName("test-game");
 
-		RenameGame renameGame = new RenameGame();
-		renameGame.setName("test-game");
-		renameGame.setGameId(recruitingGame.gameId().id());
+		RenameGameForm renameGameForm = new RenameGameForm();
+		renameGameForm.setName("test-game");
 
-		Set<ConstraintViolation<RenameGame>> constraintViolations = validator
-				.validate(renameGame, AllValidations.class);
+		Set<ConstraintViolation<RenameGameForm>> constraintViolations = validator
+				.validate(renameGameForm, AllValidations.class);
 		assertEquals(1, constraintViolations.size());
 		assertEquals("Game name already in use", constraintViolations.iterator().next().getMessage());
 	}

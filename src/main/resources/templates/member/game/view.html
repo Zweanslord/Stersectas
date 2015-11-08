@@ -12,6 +12,9 @@
 			<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span><br/>
 			<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong> <span th:text="${game.maximumPlayers}">4</span>
 			<p th:text="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</p>
+			<p th:if="${isMaster}">
+				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:text="#{game.rename}">Rename Game</a>
+			</p>
 		</div>
 	</body>
 </html>

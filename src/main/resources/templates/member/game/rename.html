@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title  th:text="#{game.rename}">Rename Game</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form th:action="@{rename}" method="post" th:object="${renameGameForm}">
+				<p>
+					<label>
+						<span th:text="#{name}">Name</span>
+						<input type="text" th:field="*{name}" required="required" maxlength="30" />
+					</label>
+					<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+				</p>
+				<button type="submit" th:text="#{game.rename}">Rename Game</button>
+			</form>
+		</div>
+	</body>
+</html>

@@ -36,8 +36,7 @@ public class CreateGameController {
 	public String createGame(@Validated(AllValidations.class) CreateGame createGame, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
 			createGame(createGame);
-			return "redirect:/game/recruiting";
-			// TODO make this work return "redirect:" + findId(createGame);
+			return "redirect:/game/" + findId(createGame);
 		}
 		return "member/game/create";
 	}

@@ -37,6 +37,9 @@ public class GameService {
 
 	@Transactional
 	public void createGame(CreateGame createGame) {
+		if (!isGameNameAvailable(createGame.getName())) {
+			throw new RuntimeException("Name not available");
+		}
 		recruitingGameRepository.save(new RecruitingGame(
 				recruitingGameRepository.nextIdentity(),
 				new Name(createGame.getName()),
@@ -52,6 +55,9 @@ public class GameService {
 
 	@Transactional
 	public void renameGame(RenameGame renameGame) {
+		if (!isGameNameAvailable(renameGame.getName())) {
+			throw new RuntimeException("Name not available");
+		}
 		// TODO check if this works too
 		// recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get()
 		// .rename(new Name(renameGame.getName()));
