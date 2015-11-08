@@ -1,7 +1,6 @@
 package stersectas.application.game;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -53,10 +52,11 @@ public class GameQueryService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<DetailedGame> findDetailedGameById(String gameId) {
+	public DetailedGame findDetailedGameById(String gameId) {
 		return gameRepository
 				.findByGameId(new GameId(gameId))
-				.map(detailedGameConversion().apply(masterNameRetriever().apply(userRepository)));
+				.map(detailedGameConversion().apply(masterNameRetriever().apply(userRepository)))
+				.orElseThrow(() -> new GameNotFoundException());
 	}
 
 	private static Function<Function<Game, Name>, Function<Game, DetailedGame>> detailedGameConversion() {

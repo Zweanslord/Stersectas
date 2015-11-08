@@ -24,7 +24,7 @@ import stersectas.domain.user.UserRepository;
 @Service
 public class UserService {
 
-	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
 	private static final String INITIAL_USERNAME = "initial";
 	private static final String TEST_USERNAME = "test";
@@ -149,7 +149,7 @@ public class UserService {
 	}
 
 	private void createInitialUser() {
-		log.info("Creating initial user.");
+		LOGGER.info("Creating initial user.");
 		User user = new User(
 				userRepository.nextIdentity(),
 				INITIAL_USERNAME,
@@ -162,7 +162,7 @@ public class UserService {
 
 	@Transactional
 	public void initialiseTestUser() {
-		log.info("Creating test user.");
+		LOGGER.info("Creating test user.");
 		Optional<User> optionalUser = userRepository.findByUsername(TEST_USERNAME);
 		if (!optionalUser.isPresent()) {
 			User user = new User(

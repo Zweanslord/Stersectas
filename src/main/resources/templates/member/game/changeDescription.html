@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title  th:text="#{game.change.description}">Change Game Description</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form th:action="@{changeDescription}" method="post" th:object="${changeGameDescriptionForm}">
+				<p>
+					<label>
+						<span th:text="#{description}">Description</span>
+						<input type="text" th:field="*{description}" required="required" maxlength="1000" />
+					</label>
+					<div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
+				</p>				
+				<button type="submit" th:text="#{game.change.description}">Change Game Description</button>
+				<a th:href="@{/game/{id}(id=${gameId})}" th:text="#{cancel}">Cancel</a>
+			</form>
+		</div>
+	</body>
+</html>

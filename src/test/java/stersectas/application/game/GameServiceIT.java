@@ -116,11 +116,11 @@ public class GameServiceIT extends BaseIT {
 	@Transactional
 	public void changeGameDescription() {
 		RecruitingGame recruitingGame = createRecruitingGame();
-		ChangeGameDescription changeGameDescription = new ChangeGameDescription();
-		changeGameDescription.setGameId(recruitingGame.gameId().id());
-		changeGameDescription.setDescription("Changed Description");
 
-		gameService.changeGameDescription(changeGameDescription);
+		gameService.changeGameDescription(
+				new ChangeGameDescription(
+						recruitingGame.gameId().id(),
+						"Changed Description"));
 
 		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new Description("Changed Description"), updatedGame.description());

@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import stersectas.application.game.DetailedGame;
 import stersectas.application.game.GameQueryService;
@@ -30,12 +29,10 @@ public class ViewGameController {
 	}
 
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
-	public String view(@PathVariable String gameId, HttpServletRequest request, Model model)
-			throws NoSuchRequestHandlingMethodException {
-		DetailedGame game = gameQueryService.findDetailedGameById(gameId)
-				.orElseThrow(() -> new NoSuchRequestHandlingMethodException(request));
+	public String view(@PathVariable String gameId, HttpServletRequest request, Model model) {
+		DetailedGame game = gameQueryService.findDetailedGameById(gameId);
 		model.addAttribute("game", game);
 		model.addAttribute("isMaster", gamerService.isCurrentGamerTheMasterOfGame(gameId));
-		return "member/game/view";
+		return "game/view";
 	}
 }

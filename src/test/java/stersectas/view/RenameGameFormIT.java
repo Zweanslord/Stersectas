@@ -16,7 +16,7 @@ import stersectas.application.game.CreateGame;
 import stersectas.application.game.GameService;
 import stersectas.application.validation.AllValidations;
 import stersectas.domain.game.RecruitingGame;
-import stersectas.view.member.game.RenameGameForm;
+import stersectas.view.member.game.RenameForm;
 
 public class RenameGameFormIT extends BaseIT {
 
@@ -28,10 +28,10 @@ public class RenameGameFormIT extends BaseIT {
 
 	@Test
 	public void validGameName() {
-		RenameGameForm renameGameForm = new RenameGameForm();
+		RenameForm renameGameForm = new RenameForm();
 		renameGameForm.setName("test-game");
 
-		Set<ConstraintViolation<RenameGameForm>> constraintViolations = validator
+		Set<ConstraintViolation<RenameForm>> constraintViolations = validator
 				.validate(renameGameForm, AllValidations.class);
 		assertEquals(0, constraintViolations.size());
 	}
@@ -41,10 +41,10 @@ public class RenameGameFormIT extends BaseIT {
 	public void alreadyTakenGameName() {
 		createGameWithName("test-game");
 
-		RenameGameForm renameGameForm = new RenameGameForm();
+		RenameForm renameGameForm = new RenameForm();
 		renameGameForm.setName("test-game");
 
-		Set<ConstraintViolation<RenameGameForm>> constraintViolations = validator
+		Set<ConstraintViolation<RenameForm>> constraintViolations = validator
 				.validate(renameGameForm, AllValidations.class);
 		assertEquals(1, constraintViolations.size());
 		assertEquals("Game name already in use", constraintViolations.iterator().next().getMessage());

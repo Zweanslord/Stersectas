@@ -19,7 +19,7 @@ import stersectas.profile.DefaultProfile;
 @DefaultProfile
 public class JavaMailSenderEmailService implements EmailService {
 
-	private static final Logger log = LoggerFactory.getLogger(JavaMailSenderEmailService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JavaMailSenderEmailService.class);
 
 	private final JavaMailSender mailSender;
 
@@ -41,7 +41,7 @@ public class JavaMailSenderEmailService implements EmailService {
 		} catch (MessagingException e) {
 			// catching exception because this is an Async method
 			// maybe still throw some kind of error?
-			log.error("Failed to send email.", e);
+			LOGGER.error("Failed to send email.", e);
 		}
 	}
 

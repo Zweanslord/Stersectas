@@ -101,4 +101,9 @@ public class GameService {
 		return recruitingGameRepository.findAllByOrderByNameAsc();
 	}
 
+	@Transactional(readOnly = true)
+	public Game findGameById(String gameId) {
+		return gameRepository.findByGameId(new GameId(gameId)).orElseThrow(() -> new GameNotFoundException());
+	}
+
 }

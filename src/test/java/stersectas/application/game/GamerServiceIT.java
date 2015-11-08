@@ -12,12 +12,8 @@ import stersectas.BaseIT;
 import stersectas.application.security.SecurityService;
 import stersectas.application.user.UserService;
 import stersectas.domain.game.Game;
-import stersectas.domain.game.GameRepository;
 
 public class GamerServiceIT extends BaseIT {
-
-	@Autowired
-	private GameRepository gameRepository;
 
 	@Autowired
 	private GameService gameService;
@@ -67,7 +63,7 @@ public class GamerServiceIT extends BaseIT {
 	}
 
 	private GamerService setupGamerService(SecurityService securityService) {
-		return new GamerService(gameRepository, securityService);
+		return new GamerService(gameService, securityService);
 	}
 
 	public class SecurityServiceStub extends SecurityService {

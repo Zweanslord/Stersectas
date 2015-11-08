@@ -18,7 +18,7 @@ import stersectas.domain.user.User;
 @Service
 public class VerificationEmailService {
 
-	private static final Logger log = LoggerFactory.getLogger(VerificationEmailService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(VerificationEmailService.class);
 
 	private static final String SUBJECT_MESSAGE_KEY = "email.register.verification";
 
@@ -40,7 +40,7 @@ public class VerificationEmailService {
 	}
 
 	public void sendEmailVerification(User user, VerificationToken verificationToken, HttpServletRequest request) {
-		log.info("Sending verification token {} to {} for registration of {}",
+		LOGGER.info("Sending verification token {} to {} for registration of {}",
 				verificationToken.tokenString(), user.getEmail(), user.getUsername());
 
 		String to = user.getEmail();

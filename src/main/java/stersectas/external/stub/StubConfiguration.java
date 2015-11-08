@@ -15,12 +15,12 @@ import stersectas.profile.TestingProfile;
 @TestingProfile
 public class StubConfiguration {
 
-	private static final Logger log = LoggerFactory.getLogger(StubConfiguration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StubConfiguration.class);
 
 	@Bean
 	@Primary
 	public Clock stubbedClock() {
-		log.info("Using timetravelling clock.");
+		LOGGER.info("Using timetravelling clock.");
 		return new TimeTravellingClock();
 	}
 

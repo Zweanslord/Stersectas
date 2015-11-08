@@ -1,29 +1,21 @@
 package stersectas.application.game;
 
-import javax.validation.constraints.Size;
-
 public class ChangeGameDescription {
 
-	@Size(min = 1)
-	private String gameId;
+	private final String gameId;
+	private final String description;
 
-	@Size(min = 1, max = 1000)
-	private String description;
+	public ChangeGameDescription(String gameId, String description) {
+		this.gameId = gameId;
+		this.description = description;
+	}
 
 	public String getGameId() {
 		return gameId;
 	}
 
-	public void setGameId(String gameId) {
-		this.gameId = gameId;
-	}
-
 	public String getDescription() {
 		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 }
