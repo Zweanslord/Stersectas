@@ -21,7 +21,7 @@ public class SecurityService {
 		return userService.findByUsername(currentUsername());
 	}
 
-	private String currentUsername() {
+	protected String currentUsername() {
 		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 

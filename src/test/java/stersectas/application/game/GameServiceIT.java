@@ -63,6 +63,19 @@ public class GameServiceIT extends BaseIT {
 		assertEquals(new UserId("0123456789"), game.masterId());
 	}
 
+	@Test(expected = RuntimeException.class)
+	@Transactional
+	public void createGameWithExistingGame() {
+		createRecruitingGame("alreadyTaken");
+		CreateGame createGame = new CreateGame();
+		createGame.setName("alreadyTaken");
+		createGame.setDescription("Description");
+		createGame.setMaximumPlayers(2);
+		createGame.setMasterId("0123456789");
+
+		gameService.createGame(createGame);
+	}
+
 	@Test
 	@Transactional
 	public void renameGame() {
@@ -73,6 +86,16 @@ public class GameServiceIT extends BaseIT {
 
 		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new Name("Renamed"), updatedGame.name());
+	}
+
+	@Test(expected = RuntimeException.class)
+	@Transactional
+	public void renameGameWithExistingName() {
+		createRecruitingGame("alreadyTaken");
+		RecruitingGame recruitingGame = createRecruitingGame();
+		RenameGame renameGame = new RenameGame(recruitingGame.gameId().id(), "alreadyTaken");
+
+		gameService.renameGame(renameGame);
 	}
 
 	@Test
@@ -132,11 +155,13 @@ public class GameServiceIT extends BaseIT {
 		assertCannotFindGame(recruitingGame.name().name());
 	}
 
-
-
 	private RecruitingGame createRecruitingGame() {
+		return createRecruitingGame("test-game");
+	}
+
+	private RecruitingGame createRecruitingGame(String name) {
 		CreateGame createGame = new CreateGame();
-		createGame.setName("test-game");
+		createGame.setName(name);
 		createGame.setDescription("Description");
 		createGame.setMaximumPlayers(2);
 		createGame.setMasterId("0123456789");
