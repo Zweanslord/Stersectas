@@ -1,5 +1,6 @@
 package stersectas.application.game;
 
+import lombok.Getter;
 import stersectas.domain.game.Game;
 import stersectas.domain.game.Name;
 
@@ -8,32 +9,16 @@ import stersectas.domain.game.Name;
  */
 public class ListedGame {
 
-	private final String gameId;
-	private final String name;
-	private final int maximumPlayers;
-	private final String masterName;
+	@Getter private final String gameId;
+	@Getter private final String name;
+	@Getter private final int maximumPlayers;
+	@Getter private final String masterName;
 
 	ListedGame(Game game, Name masterName) {
 		gameId = game.gameId().id();
 		name = game.name().name();
 		maximumPlayers = game.maximumPlayers().maximum();
 		this.masterName = masterName.name();
-	}
-
-	public String getGameId() {
-		return gameId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getMaximumPlayers() {
-		return maximumPlayers;
-	}
-
-	public String getMasterName() {
-		return masterName;
 	}
 
 }

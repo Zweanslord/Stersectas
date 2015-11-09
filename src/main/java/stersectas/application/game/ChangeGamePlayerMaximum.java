@@ -4,6 +4,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class ChangeGamePlayerMaximum {
 
 	@Size(min = 1)
@@ -12,21 +17,5 @@ public class ChangeGamePlayerMaximum {
 	@Min(1)
 	@Max(8)
 	private int maximumPlayers;
-
-	public String getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(String gameId) {
-		this.gameId = gameId;
-	}
-
-	public int getMaximumPlayers() {
-		return maximumPlayers;
-	}
-
-	public void setMaximumPlayers(int maximumPlayers) {
-		this.maximumPlayers = maximumPlayers;
-	}
 
 }

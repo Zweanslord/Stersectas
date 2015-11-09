@@ -4,6 +4,10 @@ Interstellar civilizations carve their own path through space.
 ## Development Workspace
 Development tools used:
 * Spring Tool Suite
+* [Project Lombok](https://projectlombok.org/)
+
+### Project Lombok
+After running maven, go to $MAVEN_REPO\org\projectlombok\lombok\<version> and run lombok-<version>.jar which will install a plugin to eclipse, which the Spring Tool Suite is based on. For alternative IDE's and support, go to Project Lombok's website.
 
 ### Sass Development
 To automatically update the css files when making changes to the sass files during local development, run `mvn spring-boot:run`, which runs the server, and `mvn sass:watch`, which automatically generates css when sass files are changed, at the same time.
