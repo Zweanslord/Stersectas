@@ -23,9 +23,4 @@ public class CreateGame {
 
 	private String masterId;
 
-
-	public String getName() {
-		return name;
-	}
-
 }

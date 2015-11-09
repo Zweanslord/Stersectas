@@ -1,12 +1,11 @@
 package stersectas.application.game;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class RenameGame {
 
-	private final String
-			gameId,
+	String  gameId,
 			name;
 
 }
