@@ -8,7 +8,7 @@ public class MaximumPlayersTest {
 
 	public void create() {
 		MaximumPlayers maximumPlayers = new MaximumPlayers(4);
-		assertEquals(4, maximumPlayers.maximum());
+		assertEquals(4, maximumPlayers.maximumPlayers());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

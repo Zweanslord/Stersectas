@@ -8,12 +8,18 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import stersectas.documentation.HibernateConstructor;
 import stersectas.domain.user.UserId;
 
 // @MappedSuperclass
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@AllArgsConstructor
+@Accessors(fluent = true)
+@Getter
 public abstract class Game {
 
 	@EmbeddedId
@@ -36,19 +42,6 @@ public abstract class Game {
 	protected Game() {
 	}
 
-	protected Game(
-			GameId gameId,
-			Name name,
-			Description description,
-			MaximumPlayers maximumPlayers,
-			UserId masterId) {
-		this.gameId = gameId;
-		this.name = name;
-		this.description = description;
-		this.maximumPlayers = maximumPlayers;
-		this.masterId = masterId;
-	}
-
 	protected void rename(Name name) {
 		this.name = name;
 	}
@@ -62,25 +55,5 @@ public abstract class Game {
 	}
 
 	public abstract ArchivedGame archive();
-
-	public GameId gameId() {
-		return gameId;
-	}
-
-	public Name name() {
-		return name;
-	}
-
-	public Description description() {
-		return description;
-	}
-
-	public MaximumPlayers maximumPlayers() {
-		return maximumPlayers;
-	}
-
-	public UserId masterId() {
-		return masterId;
-	}
 
 }

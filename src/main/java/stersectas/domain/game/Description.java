@@ -4,19 +4,24 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
 
+import lombok.Value;
+import lombok.experimental.Accessors;
 import stersectas.documentation.HibernateConstructor;
 
 @Embeddable
+@Value
+@Accessors(fluent = true)
 public class Description {
 
-	private static final int MAXIMUM_LENGTH = 1000;
+	static int MAXIMUM_LENGTH = 1000;
 
 	@Size(max = MAXIMUM_LENGTH)
 	@Column(nullable = false)
-	private String description;
+	String description;
 
 	@HibernateConstructor
-	Description() {
+	private Description() {
+		description = "";
 	}
 
 	public Description(String description) {
@@ -27,27 +32,6 @@ public class Description {
 					String.format("Description exceeds maximum length of %s.", MAXIMUM_LENGTH));
 		}
 		this.description = description;
-	}
-
-	public String description() {
-		return description;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		final boolean result;
-		if (object instanceof Description) {
-			final Description other = (Description) object;
-			result = description.equals(other.description);
-		} else {
-			result = false;
-		}
-		return result;
-	}
-
-	@Override
-	public int hashCode() {
-		return description.hashCode();
 	}
 
 }

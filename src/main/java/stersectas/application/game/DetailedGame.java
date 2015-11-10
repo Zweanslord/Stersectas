@@ -7,19 +7,20 @@ import stersectas.domain.game.Name;
 /**
  * A Data Transfer Object (DTO) used for the view to show a a game with all its details.
  */
+@Getter
 public class DetailedGame {
 
-	@Getter private final String gameId;
-	@Getter private final String name;
-	@Getter private final String description;
-	@Getter private final int maximumPlayers;
-	@Getter private final String masterName;
+	private final String gameId;
+	private final String name;
+	private final String description;
+	private final int maximumPlayers;
+	private final String masterName;
 
 	DetailedGame(Game game, Name masterName) {
 		gameId = game.gameId().id();
 		name = game.name().name();
 		description = game.description().description();
-		maximumPlayers = game.maximumPlayers().maximum();
+		maximumPlayers = game.maximumPlayers().maximumPlayers();
 		this.masterName = masterName.name();
 	}
 

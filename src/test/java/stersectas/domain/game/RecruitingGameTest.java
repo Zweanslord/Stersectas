@@ -31,7 +31,7 @@ public class RecruitingGameTest {
 
 		game.adjustMaximumOfPlayers(new MaximumPlayers(2));
 
-		assertEquals(2, game.maximumPlayers().maximum());
+		assertEquals(2, game.maximumPlayers().maximumPlayers());
 	}
 
 	@Test

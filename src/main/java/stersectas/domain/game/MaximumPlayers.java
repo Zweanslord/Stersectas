@@ -2,21 +2,26 @@ package stersectas.domain.game;
 
 import javax.persistence.Embeddable;
 
+import lombok.Value;
+import lombok.experimental.Accessors;
 import stersectas.documentation.HibernateConstructor;
 
 /**
  * Total number of {@link Player}s which the {@link Master} can accommodate in a specific {@link RecruitingGame}.
  */
 @Embeddable
+@Value
+@Accessors(fluent = true)
 public class MaximumPlayers {
 
-	private static int MIN_OF_PLAYERS = 1,
+	static int MIN_OF_PLAYERS = 1,
 			ABSOLUTE_MAX_OF_PLAYERS = 8;
 
-	private int maximumPlayers;
+	int maximumPlayers;
 
 	@HibernateConstructor
-	MaximumPlayers() {
+	private MaximumPlayers() {
+		maximumPlayers = 4;
 	}
 
 	public MaximumPlayers(int maximumOfPlayers) {
@@ -35,24 +40,4 @@ public class MaximumPlayers {
 		return ABSOLUTE_MAX_OF_PLAYERS;
 	}
 
-	public int maximum() {
-		return maximumPlayers;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		final boolean result;
-		if (object instanceof MaximumPlayers) {
-			final MaximumPlayers other = (MaximumPlayers) object;
-			result = maximumPlayers == other.maximumPlayers;
-		} else {
-			result = false;
-		}
-		return result;
-	}
-
-	@Override
-	public int hashCode() {
-		return Integer.hashCode(maximumPlayers);
-	}
 }

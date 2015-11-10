@@ -59,7 +59,7 @@ public class GameServiceIT extends BaseIT {
 		RecruitingGame game = gameService.findRecruitingGameByName("Test-game");
 		assertEquals("Test-game", game.name().name());
 		assertEquals("Description", game.description().description());
-		assertEquals(2, game.maximumPlayers().maximum());
+		assertEquals(2, game.maximumPlayers().maximumPlayers());
 		assertEquals(new UserId("0123456789"), game.masterId());
 	}
 
