@@ -102,11 +102,9 @@ public class GameServiceIT extends BaseIT {
 	@Transactional
 	public void changeGamePlayerMaximum() {
 		RecruitingGame recruitingGame = createRecruitingGame();
-		ChangeGamePlayerMaximum changeGamePlayerMaximum = new ChangeGamePlayerMaximum();
-		changeGamePlayerMaximum.setGameId(recruitingGame.gameId().id());
-		changeGamePlayerMaximum.setMaximumPlayers(1);
+		ChangeGameMaximumPlayers changeGamePlayerMaximum = new ChangeGameMaximumPlayers(recruitingGame.gameId().id(), 1);
 
-		gameService.changeGamePlayerMaximum(changeGamePlayerMaximum);
+		gameService.changeGameMaximumPlayers(changeGamePlayerMaximum);
 
 		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new MaximumPlayers(1), updatedGame.maximumPlayers());

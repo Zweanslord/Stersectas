@@ -5,28 +5,26 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import stersectas.application.game.ChangeGameMaximumPlayers;
 import stersectas.application.game.DetailedGame;
 import stersectas.application.game.GameQueryService;
 import stersectas.application.game.GameService;
 import stersectas.application.game.GamerService;
-import stersectas.application.game.RenameGame;
-import stersectas.application.validation.AllValidations;
 
 @Controller
 @RequestMapping("/member/game")
-public class RenameGameController {
+public class ChangeGameMaximumPlayersController {
 
 	private final GameQueryService gameQueryService;
 	private final GameService gameService;
 	private final GamerService gamerService;
 
 	@Autowired
-	public RenameGameController(
+	public ChangeGameMaximumPlayersController(
 			GameQueryService gameQueryService,
 			GameService gameService,
 			GamerService gamerService) {
@@ -35,31 +33,32 @@ public class RenameGameController {
 		this.gamerService = gamerService;
 	}
 
-	@RequestMapping(value = "/{gameId}/rename", method = RequestMethod.GET)
-	public String renameGame(@PathVariable String gameId, Model model) {
+	@RequestMapping(value = "/{gameId}/changeMaximumPlayers", method = RequestMethod.GET)
+	public String changeGameMaximumPlayers(@PathVariable String gameId, Model model) {
 		currentGamerIsMasterOrThrowException(gameId);
 
 		DetailedGame game = gameQueryService.findDetailedGameById(gameId);
 		model.addAttribute("gameId", gameId);
-		model.addAttribute("renameGameForm", new RenameForm(game.getName()));
-		return "member/game/rename";
+		model.addAttribute("changeGameMaximumPlayersForm", new ChangeMaximumPlayersForm(game.getMaximumPlayers()));
+		return "member/game/changeMaximumPlayers";
 	}
 
-	@RequestMapping(value = "/{gameId}/rename", method = RequestMethod.POST)
-	public String renameGame(@PathVariable String gameId, @Validated(AllValidations.class) RenameForm renameGameForm,
+	@RequestMapping(value = "/{gameId}/changeMaximumPlayers", method = RequestMethod.POST)
+	public String changeGameMaximumPlayers(@PathVariable String gameId, ChangeMaximumPlayersForm changePlayerMaximumForm,
 			BindingResult bindingResult) {
 		currentGamerIsMasterOrThrowException(gameId);
 
 		if (!bindingResult.hasErrors()) {
-			gameService.renameGame(new RenameGame(gameId, renameGameForm.getName()));
+			gameService.changeGameMaximumPlayers(
+					new ChangeGameMaximumPlayers(gameId, changePlayerMaximumForm.getMaximumPlayers()));
 			return "redirect:/game/" + gameId;
 		}
-		return "member/game/rename";
+		return "member/game/changeMaximumPlayers";
 	}
 
 	private void currentGamerIsMasterOrThrowException(String gameId) {
 		if (!gamerService.isCurrentGamerTheMasterOfGame(gameId)) {
-			throw new AccessDeniedException("Only game master is allowed to rename game " + gameId);
+			throw new AccessDeniedException("Only game master is allowed to change maximum players of game " + gameId);
 		}
 	}
 

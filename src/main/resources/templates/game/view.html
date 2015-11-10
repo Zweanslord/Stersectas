@@ -14,6 +14,7 @@
 			<p th:text="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</p>
 			<p th:if="${isMaster}">
 				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:text="#{game.rename}">Rename Game</a>
+				<a th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:text="#{game.change.maximum.players}">Change Game Maximum Players</a>
 				<a th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
 			</p>
 		</div>

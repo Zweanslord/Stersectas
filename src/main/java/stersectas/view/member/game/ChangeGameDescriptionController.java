@@ -35,9 +35,9 @@ public class ChangeGameDescriptionController {
 
 	@RequestMapping(value = "/{gameId}/changeDescription", method = RequestMethod.GET)
 	public String changeGameDescription(@PathVariable String gameId, Model model) {
-		DetailedGame game = gameQueryService.findDetailedGameById(gameId);
 		currentGamerIsMasterOrThrowException(gameId);
 
+		DetailedGame game = gameQueryService.findDetailedGameById(gameId);
 		model.addAttribute("gameId", gameId);
 		model.addAttribute("changeGameDescriptionForm", new ChangeDescriptionForm(game.getDescription()));
 		return "member/game/changeDescription";

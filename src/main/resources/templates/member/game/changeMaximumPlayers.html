@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title  th:text="#{game.change.maximum.players}">Change Game Maximum Players</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form th:action="@{changeMaximumPlayers}" method="post" th:object="${changeGameMaximumPlayersForm}">
+				<p>
+					<label>
+						<span th:text="#{game.maximumPlayers}">Maximum Players</span>
+						<input type="number" th:field="*{maximumPlayers}" required="required" min="1" max="8"/>
+					</label>
+					<div th:if="${#fields.hasErrors('maximumPlayers')}" th:errors="*{maximumPlayers}">Maximum Players error</div>
+				</p>				
+				<button type="submit" th:text="#{game.change.maximum.players}">Change Game Maximum Players</button>
+				<a th:href="@{/game/{id}(id=${gameId})}" th:text="#{cancel}">Cancel</a>
+			</form>
+		</div>
+	</body>
+</html>

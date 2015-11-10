@@ -66,7 +66,7 @@ public class GameService {
 	}
 
 	@Transactional
-	public void changeGamePlayerMaximum(ChangeGamePlayerMaximum changeGamePlayerMaximum) {
+	public void changeGameMaximumPlayers(ChangeGameMaximumPlayers changeGamePlayerMaximum) {
 		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(
 				new GameId(changeGamePlayerMaximum.getGameId())).get();
 		recruitingGame.adjustMaximumOfPlayers(new MaximumPlayers(changeGamePlayerMaximum.getMaximumPlayers()));
