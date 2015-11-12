@@ -93,7 +93,7 @@ public class GameService {
 
 	@Transactional(readOnly = true)
 	public boolean isGameNameAvailable(String gameName) {
-		return !gameRepository.findByName(new Name(gameName)).isPresent();
+		return gameRepository.countByName(new Name(gameName)) == 0;
 	}
 
 	@Transactional(readOnly = true)

@@ -28,26 +28,26 @@ public class CreateGameController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String createGameForm(Model model) {
-		model.addAttribute("createGame", new CreateGame());
+		model.addAttribute("createGame", new CreateGameForm());
 		return "member/game/create";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createGame(@Validated(AllValidations.class) CreateGame createGame, BindingResult bindingResult) {
+	public String createGame(@Validated(AllValidations.class) CreateGameForm createGameForm, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
-			createGame(createGame);
-			return "redirect:/game/" + findId(createGame);
+			gameService.createGame(new CreateGame(
+					createGameForm.getName(),
+					createGameForm.getDescription(),
+					createGameForm.getMaximumPlayers(),
+					securityService.currentUser().getUserId().id()));
+
+			return "redirect:/game/" + findGameId(createGameForm.getName());
 		}
 		return "member/game/create";
 	}
 
-	private void createGame(CreateGame createGame) {
-		createGame.setMasterId(securityService.currentUser().getUserId().id());
-		gameService.createGame(createGame);
-	}
-
-	private String findId(CreateGame createGame) {
-		return gameService.findRecruitingGameByName(createGame.getName()).gameId().id();
+	private String findGameId(String gameName) {
+		return gameService.findRecruitingGameByName(gameName).gameId().id();
 	}
 
 }

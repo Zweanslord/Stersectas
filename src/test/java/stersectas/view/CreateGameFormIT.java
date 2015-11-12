@@ -14,10 +14,9 @@ import stersectas.BaseIT;
 import stersectas.application.game.CreateGameTestBuilder;
 import stersectas.application.game.GameService;
 import stersectas.application.validation.AllValidations;
-import stersectas.domain.game.RecruitingGame;
-import stersectas.view.member.game.RenameForm;
+import stersectas.view.member.game.CreateGameForm;
 
-public class RenameGameFormIT extends BaseIT {
+public class CreateGameFormIT extends BaseIT {
 
 	@Autowired
 	private Validator validator;
@@ -26,11 +25,13 @@ public class RenameGameFormIT extends BaseIT {
 	private GameService gameService;
 
 	@Test
-	public void validGameName() {
-		val renameGameForm = new RenameForm();
-		renameGameForm.setName("test-game");
+	public void validCreateGameForm() {
+		val createGameForm = new CreateGameForm();
+		createGameForm.setName("test-game");
+		createGameForm.setDescription("Description");
+		createGameForm.setMaximumPlayers(4);
 
-		val constraintViolations = validator.validate(renameGameForm, AllValidations.class);
+		val constraintViolations = validator.validate(createGameForm, AllValidations.class);
 		assertEquals(0, constraintViolations.size());
 	}
 
@@ -39,21 +40,21 @@ public class RenameGameFormIT extends BaseIT {
 	public void alreadyTakenGameName() {
 		createGameWithName("test-game");
 
-		val renameGameForm = new RenameForm();
-		renameGameForm.setName("test-game");
+		val createGameForm = new CreateGameForm();
+		createGameForm.setName("test-game");
+		createGameForm.setDescription("Description");
+		createGameForm.setMaximumPlayers(4);
 
-		val constraintViolations = validator.validate(renameGameForm, AllValidations.class);
+		val constraintViolations = validator.validate(createGameForm, AllValidations.class);
 		assertEquals(1, constraintViolations.size());
 		assertEquals("Game name already in use", constraintViolations.iterator().next().getMessage());
 	}
 
-	private RecruitingGame createGameWithName(String name) {
+	private void createGameWithName(String name) {
 		gameService.createGame(
 				CreateGameTestBuilder.defaultBuilder()
 						.name(name)
 						.build());
-
-		return gameService.findRecruitingGameByName(name);
 	}
 
 }

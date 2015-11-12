@@ -5,13 +5,14 @@ import static org.junit.Assert.fail;
 
 import javax.transaction.Transactional;
 
+import lombok.val;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import stersectas.BaseIT;
 import stersectas.application.user.UserService;
-import stersectas.domain.game.ArchivedGame;
 import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.Description;
 import stersectas.domain.game.GameRepository;
@@ -48,15 +49,13 @@ public class GameServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void createGame() {
-		CreateGame createGame = new CreateGame();
-		createGame.setName("Test-game");
-		createGame.setDescription("Description");
-		createGame.setMaximumPlayers(2);
-		createGame.setMasterId("0123456789");
+		gameService.createGame(new CreateGame(
+				"Test-game",
+				"Description",
+				2,
+				"0123456789"));
 
-		gameService.createGame(createGame);
-
-		RecruitingGame game = gameService.findRecruitingGameByName("Test-game");
+		val game = gameService.findRecruitingGameByName("Test-game");
 		assertEquals("Test-game", game.name().name());
 		assertEquals("Description", game.description().description());
 		assertEquals(2, game.maximumPlayers().maximumPlayers());
@@ -67,24 +66,21 @@ public class GameServiceIT extends BaseIT {
 	@Transactional
 	public void createGameWithExistingGame() {
 		createRecruitingGame("alreadyTaken");
-		CreateGame createGame = new CreateGame();
-		createGame.setName("alreadyTaken");
-		createGame.setDescription("Description");
-		createGame.setMaximumPlayers(2);
-		createGame.setMasterId("0123456789");
-
-		gameService.createGame(createGame);
+		gameService.createGame(
+				CreateGameTestBuilder.defaultBuilder()
+						.name("alreadyTaken")
+						.build());
 	}
 
 	@Test
 	@Transactional
 	public void renameGame() {
-		RecruitingGame recruitingGame = createRecruitingGame();
-		RenameGame renameGame = new RenameGame(recruitingGame.gameId().id(), "Renamed");
+		val recruitingGame = createRecruitingGame();
+		val renameGame = new RenameGame(recruitingGame.gameId().id(), "Renamed");
 
 		gameService.renameGame(renameGame);
 
-		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		val updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new Name("Renamed"), updatedGame.name());
 	}
 
@@ -92,8 +88,8 @@ public class GameServiceIT extends BaseIT {
 	@Transactional
 	public void renameGameWithExistingName() {
 		createRecruitingGame("alreadyTaken");
-		RecruitingGame recruitingGame = createRecruitingGame();
-		RenameGame renameGame = new RenameGame(recruitingGame.gameId().id(), "alreadyTaken");
+		val recruitingGame = createRecruitingGame();
+		val renameGame = new RenameGame(recruitingGame.gameId().id(), "alreadyTaken");
 
 		gameService.renameGame(renameGame);
 	}
@@ -101,39 +97,39 @@ public class GameServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void changeGamePlayerMaximum() {
-		RecruitingGame recruitingGame = createRecruitingGame();
-		ChangeGameMaximumPlayers changeGamePlayerMaximum = new ChangeGameMaximumPlayers(recruitingGame.gameId().id(), 1);
+		val recruitingGame = createRecruitingGame();
+		val changeGamePlayerMaximum = new ChangeGameMaximumPlayers(recruitingGame.gameId().id(), 1);
 
 		gameService.changeGameMaximumPlayers(changeGamePlayerMaximum);
 
-		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		val updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new MaximumPlayers(1), updatedGame.maximumPlayers());
 	}
 
 	@Test
 	@Transactional
 	public void changeGameDescription() {
-		RecruitingGame recruitingGame = createRecruitingGame();
+		val recruitingGame = createRecruitingGame();
 
 		gameService.changeGameDescription(
 				new ChangeGameDescription(
 						recruitingGame.gameId().id(),
 						"Changed Description"));
 
-		RecruitingGame updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
+		val updatedGame = gameService.findRecruitingGameByName(recruitingGame.name().name());
 		assertEquals(new Description("Changed Description"), updatedGame.description());
 	}
 
 	@Test
 	@Transactional
 	public void archiveRecruitingGame() {
-		RecruitingGame recruitingGame = createRecruitingGame();
-		ArchiveGame archiveGame = new ArchiveGame();
+		val recruitingGame = createRecruitingGame();
+		val archiveGame = new ArchiveGame();
 		archiveGame.setGameId(recruitingGame.gameId().id());
 
 		gameService.archiveGame(archiveGame);
 
-		ArchivedGame archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
+		val archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
 		assertEquals(recruitingGame.gameId().id(), archivedGame.gameId().id());
 		assertCannotFindGame(recruitingGame.name().name());
 	}
@@ -141,14 +137,14 @@ public class GameServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void archiveArchivedGame() {
-		RecruitingGame recruitingGame = createRecruitingGame();
-		ArchiveGame archiveGame = new ArchiveGame();
+		val recruitingGame = createRecruitingGame();
+		val archiveGame = new ArchiveGame();
 		archiveGame.setGameId(recruitingGame.gameId().id());
 
 		gameService.archiveGame(archiveGame);
 		gameService.archiveGame(archiveGame);
 
-		ArchivedGame archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
+		val archivedGame = gameService.findArchivedGameByName(recruitingGame.name().name());
 		assertEquals(recruitingGame.gameId().id(), archivedGame.gameId().id());
 		assertCannotFindGame(recruitingGame.name().name());
 	}
@@ -158,15 +154,12 @@ public class GameServiceIT extends BaseIT {
 	}
 
 	private RecruitingGame createRecruitingGame(String name) {
-		CreateGame createGame = new CreateGame();
-		createGame.setName(name);
-		createGame.setDescription("Description");
-		createGame.setMaximumPlayers(2);
-		createGame.setMasterId("0123456789");
+		gameService.createGame(
+				CreateGameTestBuilder.defaultBuilder()
+						.name(name)
+						.build());
 
-		gameService.createGame(createGame);
-
-		return gameService.findRecruitingGameByName("test-game");
+		return gameService.findRecruitingGameByName(name);
 	}
 
 	private void assertCannotFindGame(String gameName) {
