@@ -9,14 +9,23 @@
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span><br/>
-			<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong> <span th:text="${game.maximumPlayers}">4</span>
-			<p th:text="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</p>
-			<p th:if="${isMaster}">
-				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:text="#{game.rename}">Rename Game</a>
-				<a th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:text="#{game.change.maximum.players}">Change Game Maximum Players</a>
-				<a th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
+			<div th:if="${isMaster}">
+				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:title="#{game.rename}" th:text="#{rename}">Rename</a>
+			</div>
+			<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span>
+			<br/>
+			
+			<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong>
+			<span th:text="${game.maximumPlayers}">4</span>
+			<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:title="#{game.change.maximum.players}" th:text="#{edit}">Edit</a>
+			
+			<p>
+				<!-- -/* Solution from http://stackoverflow.com/questions/30394419/thymeleaf-spring-how-to-keep-line-break but could be improved with custom functionality as described in the article */-->
+				<span th:utext="${#strings.replace( game.description ,T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" th:remove="tag">Within a young universe the first civilizations start their first voyages between the stars.</span>
+				<br th:if="${isMaster}" />
+				<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
 			</p>
+			
 		</div>
 	</body>
 </html>

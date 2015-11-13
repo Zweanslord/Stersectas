@@ -13,7 +13,7 @@
 				<p>
 					<label>
 						<span th:text="#{description}">Description</span>
-						<input type="text" th:field="*{description}" required="required" maxlength="1000" />
+						<textarea th:field="*{description}" required="required" maxlength="1000"></textarea>
 					</label>
 					<div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
 				</p>				

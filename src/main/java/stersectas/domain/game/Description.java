@@ -2,7 +2,6 @@ package stersectas.domain.game;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.Size;
 
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -15,8 +14,7 @@ public class Description {
 
 	static int MAXIMUM_LENGTH = 1000;
 
-	@Size(max = MAXIMUM_LENGTH)
-	@Column(nullable = false)
+	@Column(nullable = false, length = MAXIMUM_LENGTH)
 	String description;
 
 	@HibernateConstructor
