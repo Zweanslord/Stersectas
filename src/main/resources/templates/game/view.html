@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:ster="https://github.com/Zweanslord/Stersectas"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   	  layout:decorator="layout/default">
 	<head>
@@ -12,16 +13,16 @@
 			<div th:if="${isMaster}">
 				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:title="#{game.rename}" th:text="#{rename}">Rename</a>
 			</div>
-			<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span>
-			<br/>
-			
-			<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong>
-			<span th:text="${game.maximumPlayers}">4</span>
-			<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:title="#{game.change.maximum.players}" th:text="#{edit}">Edit</a>
-			
 			<p>
-				<!-- -/* Solution from http://stackoverflow.com/questions/30394419/thymeleaf-spring-how-to-keep-line-break but could be improved with custom functionality as described in the article */-->
-				<span th:utext="${#strings.replace( game.description ,T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" th:remove="tag">Within a young universe the first civilizations start their first voyages between the stars.</span>
+				<strong th:text="#{game.master}">Game Master:</strong> <span th:text="${game.masterName}">Overseer</span>
+				<br/>
+				
+				<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong>
+				<span th:text="${game.maximumPlayers}">4</span>
+				<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:title="#{game.change.maximum.players}" th:text="#{edit}">Edit</a>
+			</p>
+			<p>
+				<span ster:lstext="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</span>
 				<br th:if="${isMaster}" />
 				<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
 			</p>

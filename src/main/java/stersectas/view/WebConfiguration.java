@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import stersectas.view.thymeleaf.StersectasDialect;
+
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
@@ -56,6 +58,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
+	}
+
+	@Bean
+	public StersectasDialect stersectasDialect() {
+		return new StersectasDialect();
 	}
 
 }
