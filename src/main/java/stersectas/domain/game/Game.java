@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import stersectas.documentation.HibernateConstructor;
-import stersectas.domain.user.UserId;
 
 // @MappedSuperclass
 @Entity
@@ -35,8 +34,8 @@ public abstract class Game {
 	private MaximumPlayers maximumPlayers;
 
 	@Embedded
-	@AttributeOverride(name = "id", column = @Column(name = "masterId", nullable = false, unique = true))
-	private UserId masterId;
+	@AttributeOverride(name = "id", column = @Column(name = "masterId", nullable = false, unique = false))
+	private GamerId masterId;
 
 	@HibernateConstructor
 	protected Game() {

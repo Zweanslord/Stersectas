@@ -13,23 +13,22 @@ import stersectas.domain.game.GameId;
 import stersectas.domain.game.GameRepository;
 import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGameRepository;
-import stersectas.domain.user.UserRepository;
 
 @Service
 public class GameQueryService {
 
 	private final RecruitingGameRepository recruitingGameRepository;
 	private final GameRepository gameRepository;
-	private final UserRepository userRepository;
+	private final GamerService gamerService;
 
 	@Autowired
 	public GameQueryService(
 			RecruitingGameRepository recruitingGameRepository,
 			GameRepository gameRepository,
-			UserRepository userRepository) {
+			GamerService gamerService) {
 		this.recruitingGameRepository = recruitingGameRepository;
 		this.gameRepository = gameRepository;
-		this.userRepository = userRepository;
+		this.gamerService = gamerService;
 	}
 
 	@Transactional(readOnly = true)
@@ -39,7 +38,7 @@ public class GameQueryService {
 
 	private List<ListedGame> convertToListedGames(List<? extends Game> games) {
 		return games.stream()
-				.map(listedGameConversion().apply(masterNameRetriever().apply(userRepository)))
+				.map(listedGameConversion().apply(masterNameRetriever().apply(gamerService)))
 				.collect(Collectors.toList());
 	}
 
@@ -47,15 +46,15 @@ public class GameQueryService {
 		return masterNameRetriever -> game -> new ListedGame(game, masterNameRetriever.apply(game));
 	}
 
-	private static Function<UserRepository, Function<Game, Name>> masterNameRetriever() {
-		return userRepository -> game -> new Name(userRepository.findByUserId(game.masterId()).get().getUsername());
+	private static Function<GamerService, Function<Game, Name>> masterNameRetriever() {
+		return gamerService -> game -> gamerService.findNameByGamerId(game.masterId());
 	}
 
 	@Transactional(readOnly = true)
 	public DetailedGame findDetailedGameById(String gameId) {
 		return gameRepository
 				.findByGameId(new GameId(gameId))
-				.map(detailedGameConversion().apply(masterNameRetriever().apply(userRepository)))
+				.map(detailedGameConversion().apply(masterNameRetriever().apply(gamerService)))
 				.orElseThrow(() -> new GameNotFoundException());
 	}
 

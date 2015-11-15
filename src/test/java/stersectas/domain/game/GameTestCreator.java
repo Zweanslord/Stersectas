@@ -1,20 +1,20 @@
 package stersectas.domain.game;
 
-import stersectas.domain.user.UserId;
+import lombok.val;
 
 public class GameTestCreator {
 
 	public static RecruitingGame createRecruitingGame() {
-		return new RecruitingGame(
-				new GameId("0123456789"),
-				new Name("Test-Game"),
-				new Description("A game made for testing purposes"),
-				new MaximumPlayers(4),
-				new UserId("0123456789"));
+		return Gamer.create(new GamerId("0123456789"))
+				.createRecruitingGame(
+						new GameId("0123456789"),
+						new Name("Test-Game"),
+						new Description("A game made for testing purposes"),
+						new MaximumPlayers(4));
 	}
 
 	public static ArchivedGame createArchivedGame() {
-		RecruitingGame game = createRecruitingGame();
+		val game = createRecruitingGame();
 		return game.archive();
 	}
 

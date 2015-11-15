@@ -1,7 +1,5 @@
 package stersectas.domain.game;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;

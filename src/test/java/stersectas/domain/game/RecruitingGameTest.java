@@ -16,7 +16,7 @@ public class RecruitingGameTest {
 				new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new UserId("1234567890"));
+				new GamerId("1234567890"));
 
 		assertEquals(new GameId("0123456789"), game.gameId());
 		assertEquals(new Name("Test-Game"), game.name());
@@ -71,7 +71,7 @@ public class RecruitingGameTest {
 				new Name("Test-Game"),
 				new Description("A game made for testing purposes"),
 				new MaximumPlayers(4),
-				new UserId("1234567890"));
+				new GamerId("1234567890"));
 
 		ArchivedGame archivedGame = recruitingGame.archive();
 

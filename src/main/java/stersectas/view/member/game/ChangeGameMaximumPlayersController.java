@@ -13,7 +13,6 @@ import stersectas.application.game.ChangeGameMaximumPlayers;
 import stersectas.application.game.DetailedGame;
 import stersectas.application.game.GameQueryService;
 import stersectas.application.game.GameService;
-import stersectas.application.game.GamerService;
 
 @Controller
 @RequestMapping("/member/game")
@@ -21,16 +20,13 @@ public class ChangeGameMaximumPlayersController {
 
 	private final GameQueryService gameQueryService;
 	private final GameService gameService;
-	private final GamerService gamerService;
 
 	@Autowired
 	public ChangeGameMaximumPlayersController(
 			GameQueryService gameQueryService,
-			GameService gameService,
-			GamerService gamerService) {
+			GameService gameService) {
 		this.gameQueryService = gameQueryService;
 		this.gameService = gameService;
-		this.gamerService = gamerService;
 	}
 
 	@RequestMapping(value = "/{gameId}/changeMaximumPlayers", method = RequestMethod.GET)
@@ -57,7 +53,7 @@ public class ChangeGameMaximumPlayersController {
 	}
 
 	private void currentGamerIsMasterOrThrowException(String gameId) {
-		if (!gamerService.isCurrentGamerTheMasterOfGame(gameId)) {
+		if (!gameService.isCurrentGamerTheMasterOfGame(gameId)) {
 			throw new AccessDeniedException("Only game master is allowed to change maximum players of game " + gameId);
 		}
 	}

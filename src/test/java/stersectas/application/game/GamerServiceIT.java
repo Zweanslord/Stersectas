@@ -1,61 +1,66 @@
 package stersectas.application.game;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import javax.transaction.Transactional;
-
+import static org.junit.Assert.assertEquals;
 import lombok.val;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import stersectas.BaseIT;
 import stersectas.application.security.SecurityService;
 import stersectas.application.user.UserService;
-import stersectas.domain.game.Game;
+import stersectas.domain.game.GamerId;
+import stersectas.domain.game.GamerRepository;
+import stersectas.domain.game.Name;
+import stersectas.domain.user.UserRepository;
 
 public class GamerServiceIT extends BaseIT {
 
-	@Autowired
-	private GameService gameService;
+	@Autowired private UserRepository userRepository;
+	@Autowired private GamerRepository gamerRepository;
+	@Autowired private UserService userService;
 
-	@Autowired
-	private UserService userService;
+	@Autowired private GamerService gamerService;
 
 	@Test
 	@Transactional
-	public void currentGamerIsGameMaster() {
-		val securityService = setupSecurityService();
-		val gamerService = setupGamerService(securityService);
+	public void findGamerById() {
+		userService.initialiseTestUser();
+		val testUser = userService.findByUsername("test");
 
-		val game = createGame(securityService.currentUser().getUserId().id());
+		val gamer = gamerService.findGamerById(testUser.getUserId().id());
 
-		val isMaster = gamerService.isCurrentGamerTheMasterOfGame(game.gameId().id());
-		assertTrue(isMaster);
+		assertEquals(testUser.getUserId().id(), gamer.gamerId().id());
+	}
+
+	@Test(expected = GamerNotFoundException.class)
+	public void didNotFindGamerById() {
+		gamerService.findGamerById("onzinnige-id");
 	}
 
 	@Test
 	@Transactional
-	public void currentGamerIsNotGameMaster() {
-		userService.initializeUser();
+	public void currentGamer() {
+		userService.initialiseTestUser();
 		val securityService = setupSecurityService();
 		val gamerService = setupGamerService(securityService);
+		val testUser = userService.findByUsername("test");
 
-		val game = createGame(userService.findByUsername("initial").getUserId().id());
+		val currentGamer = gamerService.currentGamer();
 
-		val isMaster = gamerService.isCurrentGamerTheMasterOfGame(game.gameId().id());
-		assertFalse(isMaster);
+		assertEquals(testUser.getUserId().id(), currentGamer.gamerId().id());
 	}
 
-	private Game createGame(String masterId) {
-		val name = "Test-game";
-		gameService.createGame(
-				CreateGameTestBuilder.defaultBuilder()
-						.name(name)
-						.masterId(masterId)
-						.build());
-		return gameService.findRecruitingGameByName(name);
+	@Test
+	@Transactional
+	public void findNameByGamerId() {
+		userService.initialiseTestUser();
+		val testUser = userService.findByUsername("test");
+
+		val name = gamerService.findNameByGamerId(new GamerId(testUser.getUserId().id()));
+
+		assertEquals(new Name("test"), name);
 	}
 
 	private SecurityService setupSecurityService() {
@@ -63,21 +68,7 @@ public class GamerServiceIT extends BaseIT {
 	}
 
 	private GamerService setupGamerService(SecurityService securityService) {
-		return new GamerService(gameService, securityService);
-	}
-
-	public class SecurityServiceStub extends SecurityService {
-
-		SecurityServiceStub(UserService userService) {
-			super(userService);
-			userService.initialiseTestUser();
-		}
-
-		@Override
-		public String currentUsername() {
-			return "test";
-		}
-
+		return new GamerService(userRepository, securityService, gamerRepository);
 	}
 
 }

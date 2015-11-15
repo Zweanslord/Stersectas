@@ -3,7 +3,6 @@ package stersectas.domain.game;
 import javax.persistence.Entity;
 
 import stersectas.documentation.HibernateConstructor;
-import stersectas.domain.user.UserId;
 
 @Entity
 public class ArchivedGame extends Game {
@@ -17,7 +16,7 @@ public class ArchivedGame extends Game {
 			Name name,
 			Description description,
 			MaximumPlayers maximumPlayers,
-			UserId masterId) {
+			GamerId masterId) {
 		super(gameId,
 				name,
 				description,

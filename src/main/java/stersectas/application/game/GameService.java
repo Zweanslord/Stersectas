@@ -2,6 +2,8 @@ package stersectas.application.game;
 
 import java.util.List;
 
+import lombok.val;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,6 @@ import stersectas.domain.game.MaximumPlayers;
 import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
-import stersectas.domain.user.UserId;
 
 @Service
 public class GameService {
@@ -24,28 +25,34 @@ public class GameService {
 	private final GameRepository gameRepository;
 	private final RecruitingGameRepository recruitingGameRepository;
 	private final ArchivedGameRepository archivedGameRepository;
+	private final GamerService gamerService;
 
 	@Autowired
 	public GameService(
 			GameRepository gameRepository,
 			RecruitingGameRepository recruitingGameRepository,
-			ArchivedGameRepository archivedGameRepository) {
+			ArchivedGameRepository archivedGameRepository,
+			GamerService gamerService) {
 		this.gameRepository = gameRepository;
 		this.recruitingGameRepository = recruitingGameRepository;
 		this.archivedGameRepository = archivedGameRepository;
+		this.gamerService = gamerService;
 	}
 
 	@Transactional
 	public void createGame(CreateGame createGame) {
 		if (!isGameNameAvailable(createGame.getName())) {
-			throw new RuntimeException("Name not available");
+			throw new IllegalArgumentException("Name not available");
 		}
-		recruitingGameRepository.save(new RecruitingGame(
+		val master = gamerService.findGamerById(createGame.getMasterId());
+		val game = master.createRecruitingGame(
 				recruitingGameRepository.nextIdentity(),
 				new Name(createGame.getName()),
 				new Description(createGame.getDescription()),
-				new MaximumPlayers(createGame.getMaximumPlayers()),
-				new UserId(createGame.getMasterId())));
+				new MaximumPlayers(createGame.getMaximumPlayers()));
+		master.organizeGame(game);
+		recruitingGameRepository.save(game);
+		gamerService.save(master);
 	}
 
 	@Transactional(readOnly = true)
@@ -61,7 +68,7 @@ public class GameService {
 		// TODO check if this works too
 		// recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get()
 		// .rename(new Name(renameGame.getName()));
-		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get();
+		val recruitingGame = recruitingGameRepository.findByGameId(new GameId(renameGame.getGameId())).get();
 		recruitingGame.rename(new Name(renameGame.getName()));
 	}
 
@@ -74,14 +81,14 @@ public class GameService {
 
 	@Transactional
 	public void changeGameDescription(ChangeGameDescription changeGameDescription) {
-		RecruitingGame recruitingGame = recruitingGameRepository.findByGameId(
+		val recruitingGame = recruitingGameRepository.findByGameId(
 				new GameId(changeGameDescription.getGameId())).get();
 		recruitingGame.changeDescription(new Description(changeGameDescription.getDescription()));
 	}
 
 	@Transactional
 	public void archiveGame(ArchiveGame archiveGame) {
-		Game game = gameRepository.findByGameId(new GameId(archiveGame.getGameId())).get();
+		val game = gameRepository.findByGameId(new GameId(archiveGame.getGameId())).get();
 		gameRepository.delete(game);
 		archivedGameRepository.save(game.archive());
 	}
@@ -104,6 +111,12 @@ public class GameService {
 	@Transactional(readOnly = true)
 	public Game findGameById(String gameId) {
 		return gameRepository.findByGameId(new GameId(gameId)).orElseThrow(() -> new GameNotFoundException());
+	}
+
+	public boolean isCurrentGamerTheMasterOfGame(String gameId) {
+		val currentGamer = gamerService.currentGamer();
+		val masterId = findGameById(gameId).masterId();
+		return currentGamer.gamerId().equals(masterId);
 	}
 
 }

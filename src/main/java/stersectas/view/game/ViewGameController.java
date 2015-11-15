@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import stersectas.application.game.DetailedGame;
 import stersectas.application.game.GameQueryService;
-import stersectas.application.game.GamerService;
+import stersectas.application.game.GameService;
 
 @Controller
 @RequestMapping("/game")
 public class ViewGameController {
 
 	private final GameQueryService gameQueryService;
-	private final GamerService gamerService;
+	private final GameService gameService;
 
 	@Autowired
 	public ViewGameController(
 			GameQueryService gameQueryService,
-			GamerService gamerService) {
+			GameService gameService) {
 		this.gameQueryService = gameQueryService;
-		this.gamerService = gamerService;
+		this.gameService = gameService;
 	}
 
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
 	public String view(@PathVariable String gameId, HttpServletRequest request, Model model) {
 		DetailedGame game = gameQueryService.findDetailedGameById(gameId);
 		model.addAttribute("game", game);
-		model.addAttribute("isMaster", gamerService.isCurrentGamerTheMasterOfGame(gameId));
+		model.addAttribute("isMaster", gameService.isCurrentGamerTheMasterOfGame(gameId));
 		return "game/view";
 	}
 }

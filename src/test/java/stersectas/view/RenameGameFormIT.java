@@ -13,17 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import stersectas.BaseIT;
 import stersectas.application.game.CreateGameTestBuilder;
 import stersectas.application.game.GameService;
+import stersectas.application.user.UserService;
 import stersectas.application.validation.AllValidations;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.view.member.game.RenameForm;
 
 public class RenameGameFormIT extends BaseIT {
 
-	@Autowired
-	private Validator validator;
+	@Autowired private GameService gameService;
+	@Autowired private UserService userService;
 
-	@Autowired
-	private GameService gameService;
+	@Autowired private Validator validator;
 
 	@Test
 	public void validGameName() {
@@ -48,9 +48,11 @@ public class RenameGameFormIT extends BaseIT {
 	}
 
 	private RecruitingGame createGameWithName(String name) {
+		userService.initialiseTestUser();
 		gameService.createGame(
 				CreateGameTestBuilder.defaultBuilder()
 						.name(name)
+						.masterId(userService.findByUsername("test").getUserId().id())
 						.build());
 
 		return gameService.findRecruitingGameByName(name);

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import stersectas.application.game.DetailedGame;
 import stersectas.application.game.GameQueryService;
 import stersectas.application.game.GameService;
-import stersectas.application.game.GamerService;
 import stersectas.application.game.RenameGame;
 import stersectas.application.validation.AllValidations;
 
@@ -23,16 +22,13 @@ public class RenameGameController {
 
 	private final GameQueryService gameQueryService;
 	private final GameService gameService;
-	private final GamerService gamerService;
 
 	@Autowired
 	public RenameGameController(
 			GameQueryService gameQueryService,
-			GameService gameService,
-			GamerService gamerService) {
+			GameService gameService) {
 		this.gameQueryService = gameQueryService;
 		this.gameService = gameService;
-		this.gamerService = gamerService;
 	}
 
 	@RequestMapping(value = "/{gameId}/rename", method = RequestMethod.GET)
@@ -58,7 +54,7 @@ public class RenameGameController {
 	}
 
 	private void currentGamerIsMasterOrThrowException(String gameId) {
-		if (!gamerService.isCurrentGamerTheMasterOfGame(gameId)) {
+		if (!gameService.isCurrentGamerTheMasterOfGame(gameId)) {
 			throw new AccessDeniedException("Only game master is allowed to rename game " + gameId);
 		}
 	}

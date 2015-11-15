@@ -3,7 +3,6 @@ package stersectas.domain.game;
 import javax.persistence.Entity;
 
 import stersectas.documentation.HibernateConstructor;
-import stersectas.domain.user.UserId;
 
 /**
  * A story where multiple participants can play the events and adventure together.
@@ -26,7 +25,7 @@ public class RecruitingGame extends Game {
 			Name name,
 			Description description,
 			MaximumPlayers maximumPlayers,
-			UserId masterId) {
+			GamerId masterId) {
 		super(gameId,
 				name,
 				description,
