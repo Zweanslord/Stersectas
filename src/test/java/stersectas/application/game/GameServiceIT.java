@@ -20,6 +20,7 @@ import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.Description;
 import stersectas.domain.game.Game;
 import stersectas.domain.game.GameRepository;
+import stersectas.domain.game.Gamer;
 import stersectas.domain.game.GamerId;
 import stersectas.domain.game.GamerRepository;
 import stersectas.domain.game.MaximumPlayers;
@@ -52,24 +53,20 @@ public class GameServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void createGame() {
-		userService.initialiseTestUser();
-		val testUserId = findTestUserId();
+		val gamerId = "test-gamer-id";
+		gamerRepository.save(Gamer.create(new GamerId(gamerId)));
 
 		gameService.createGame(new CreateGame(
 				"Test-game",
 				"Description",
 				2,
-				testUserId));
+				gamerId));
 
 		val game = gameService.findRecruitingGameByName("Test-game");
 		assertEquals("Test-game", game.name().name());
 		assertEquals("Description", game.description().description());
 		assertEquals(2, game.maximumPlayers().maximumPlayers());
-		assertEquals(new GamerId(testUserId), game.masterId());
-	}
-
-	private String findTestUserId() {
-		return userService.findByUsername("test").getUserId().id();
+		assertEquals(new GamerId(gamerId), game.masterId());
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -164,11 +161,12 @@ public class GameServiceIT extends BaseIT {
 	}
 
 	private RecruitingGame createRecruitingGame(String name) {
-		userService.initialiseTestUser();
+		val gamerId = "test-gamer-id";
+		gamerRepository.save(Gamer.create(new GamerId(gamerId)));
 		gameService.createGame(
 				CreateGameTestBuilder.defaultBuilder()
 						.name(name)
-						.masterId(findTestUserId())
+						.masterId(gamerId)
 						.build());
 
 		return gameService.findRecruitingGameByName(name);
@@ -189,7 +187,7 @@ public class GameServiceIT extends BaseIT {
 		val gamerService = setupGamerService(securityService);
 		val gameService = setupGameService(gamerService);
 
-		val game = createGame(securityService.currentUser().getUserId().id());
+		val game = createGame(gamerService.currentGamer().gamerId().id());
 
 		val isMaster = gameService.isCurrentGamerTheMasterOfGame(game.gameId().id());
 		assertTrue(isMaster);
@@ -210,7 +208,7 @@ public class GameServiceIT extends BaseIT {
 	}
 
 	private SecurityService setupSecurityService() {
-		return new SecurityServiceStub(userService);
+		return new SecurityServiceFacade(userService);
 	}
 
 	private GamerService setupGamerService(SecurityService securityService) {

@@ -64,7 +64,7 @@ public class GamerServiceIT extends BaseIT {
 	}
 
 	private SecurityService setupSecurityService() {
-		return new SecurityServiceStub(userService);
+		return new SecurityServiceFacade(userService);
 	}
 
 	private GamerService setupGamerService(SecurityService securityService) {
