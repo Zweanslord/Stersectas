@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import stersectas.application.security.SecurityService;
 import stersectas.application.user.UpdateUserPassword;
 import stersectas.application.user.UserService;
 import stersectas.domain.user.User;
@@ -19,12 +18,10 @@ import stersectas.domain.user.User;
 public class EditPasswordController {
 
 	private final UserService userService;
-	private final SecurityService securityService;
 
 	@Autowired
-	public EditPasswordController(UserService userService, SecurityService securityService) {
+	public EditPasswordController(UserService userService) {
 		this.userService = userService;
-		this.securityService = securityService;
 	}
 
 	@RequestMapping(value = "/profile/password", method = RequestMethod.GET)
@@ -38,7 +35,7 @@ public class EditPasswordController {
 		if (bindingResult.hasErrors()) {
 			return "/profile/password";
 		}
-		User user = securityService.currentUser();
+		User user = userService.currentUser();
 		userService.updateUserPassword(user.getUserId(), updateUserPassword.getPassword());
 		return "redirect:/profile";
 	}

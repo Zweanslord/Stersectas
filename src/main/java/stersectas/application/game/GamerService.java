@@ -8,47 +8,45 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import stersectas.application.security.SecurityService;
+import stersectas.application.user.UserInterface;
 import stersectas.domain.game.Gamer;
 import stersectas.domain.game.GamerId;
 import stersectas.domain.game.GamerRepository;
 import stersectas.domain.game.Name;
 import stersectas.domain.user.User;
-import stersectas.domain.user.UserId;
-import stersectas.domain.user.UserRepository;
 
+/**
+ * Single point of access to the User domain, converting Users to Gamers.
+ */
 @Service
 public class GamerService {
 
-	private final UserRepository userRepository;
-	private final SecurityService securityService;
+	private final UserInterface userInterface;
 	private final GamerRepository gamerRepository;
 
 	@Autowired
 	public GamerService(
-			UserRepository userRepository,
-			SecurityService securityService,
+			UserInterface userInterface,
 			GamerRepository gamerRepository) {
-		this.userRepository = userRepository;
-		this.securityService = securityService;
+		this.userInterface = userInterface;
 		this.gamerRepository = gamerRepository;
 	}
 
 	public Gamer currentGamer() {
-		return findGamerById(securityService.currentUser().getUserId().id());
+		return findGamerById(userInterface.currentUser().getUserId().id());
 	}
 
 	@Transactional(readOnly = true)
 	public Gamer findGamerById(String gamerId) {
 		return gamerRepository.findByGamerId(new GamerId(gamerId))
-				.orElseGet(supplyGamerFromUsersFunction().apply(userRepository, new UserId(gamerId)));
+				.orElseGet(supplyGamerFromUsersFunction().apply(userInterface, gamerId));
 
 	}
 
-	private static BiFunction<UserRepository, UserId, Supplier<Gamer>> supplyGamerFromUsersFunction() {
-		return (userRepository, userId) -> () -> userRepository.findByUserId(userId)
-				.map(user -> convertToGamer(user))
-				.orElseThrow(() -> new GamerNotFoundException());
+	private static BiFunction<UserInterface, String, Supplier<Gamer>> supplyGamerFromUsersFunction() {
+		return (userService, gamerId) -> () -> userService.findByUserId(gamerId)
+				.map(GamerService::convertToGamer)
+				.orElseThrow(GamerNotFoundException::new);
 	}
 
 	private static Gamer convertToGamer(User user) {
@@ -57,9 +55,9 @@ public class GamerService {
 
 	@Transactional(readOnly = true)
 	public Name findNameByGamerId(GamerId gamerId) {
-		return userRepository.findByUserId(new UserId(gamerId.id()))
+		return userInterface.findByUserId(gamerId.id())
 				.map(user -> new Name(user.getUsername()))
-				.orElseThrow(() -> new GamerNotFoundException());
+				.orElseThrow(GamerNotFoundException::new);
 	}
 
 	@Transactional(propagation = Propagation.MANDATORY)

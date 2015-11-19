@@ -6,19 +6,21 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import stersectas.application.security.SecurityService;
 import stersectas.application.user.UpdateUserPassword;
+import stersectas.application.user.UserService;
 import stersectas.application.validation.PasswordValid;
 import stersectas.domain.user.User;
 
 public class PasswordValidValidator implements ConstraintValidator<PasswordValid, UpdateUserPassword> {
 
-	private final SecurityService securityService;
+	private final UserService userService;
 	private final PasswordEncoder encoder;
 
 	@Autowired
-	public PasswordValidValidator(SecurityService securityService, PasswordEncoder encoder) {
-		this.securityService = securityService;
+	public PasswordValidValidator(
+			UserService userService,
+			PasswordEncoder encoder) {
+		this.userService = userService;
 		this.encoder = encoder;
 	}
 
@@ -28,7 +30,7 @@ public class PasswordValidValidator implements ConstraintValidator<PasswordValid
 
 	@Override
 	public boolean isValid(UpdateUserPassword updateUserPassword, ConstraintValidatorContext context) {
-		User user = securityService.currentUser();
+		User user = userService.currentUser();
 		if (encoder.matches(updateUserPassword.getCurrentPassword(), user.getPassword())) {
 			return true;
 		} else {

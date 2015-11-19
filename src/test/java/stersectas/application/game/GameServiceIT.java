@@ -14,8 +14,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import stersectas.BaseIT;
-import stersectas.application.security.SecurityService;
-import stersectas.application.user.UserService;
 import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.Description;
 import stersectas.domain.game.Game;
@@ -27,7 +25,6 @@ import stersectas.domain.game.MaximumPlayers;
 import stersectas.domain.game.Name;
 import stersectas.domain.game.RecruitingGame;
 import stersectas.domain.game.RecruitingGameRepository;
-import stersectas.domain.user.UserRepository;
 
 public class GameServiceIT extends BaseIT {
 
@@ -35,8 +32,6 @@ public class GameServiceIT extends BaseIT {
 	@Autowired private GameRepository gameRepository;
 	@Autowired private RecruitingGameRepository recruitingGameRepository;
 	@Autowired private ArchivedGameRepository archivedGameRepository;
-	@Autowired private UserService userService;
-	@Autowired private UserRepository userRepository;
 	@Autowired private GamerRepository gamerRepository;
 
 	private GameService gameService;
@@ -183,43 +178,43 @@ public class GameServiceIT extends BaseIT {
 	@Test
 	@Transactional
 	public void currentGamerIsGameMaster() {
-		val securityService = setupSecurityService();
-		val gamerService = setupGamerService(securityService);
+		val gamerService = setupGamerService(new UserInterfaceStub());
 		val gameService = setupGameService(gamerService);
-
-		val game = createGame(gamerService.currentGamer().gamerId().id());
+		val game = createGame(gameService, gamerService.currentGamer().gamerId().id());
 
 		val isMaster = gameService.isCurrentGamerTheMasterOfGame(game.gameId().id());
+
 		assertTrue(isMaster);
 	}
 
 	@Test
 	@Transactional
 	public void currentGamerIsNotGameMaster() {
-		userService.initializeUser();
-		val securityService = setupSecurityService();
-		val gamerService = setupGamerService(securityService);
+		val anotherGameMasterId = "ANOTHER_GAME_MASTER_ID";
+		val userInterface = new UserInterfaceStub();
+		userInterface.addUser(anotherGameMasterId);
+		val gamerService = setupGamerService(userInterface);
 		val gameService = setupGameService(gamerService);
-
-		val game = createGame(userService.findByUsername("initial").getUserId().id());
+		val game = createGame(gameService, anotherGameMasterId);
 
 		val isMaster = gameService.isCurrentGamerTheMasterOfGame(game.gameId().id());
+
 		assertFalse(isMaster);
 	}
 
-	private SecurityService setupSecurityService() {
-		return new SecurityServiceFacade(userService);
-	}
-
-	private GamerService setupGamerService(SecurityService securityService) {
-		return new GamerService(userRepository, securityService, gamerRepository);
+	private GamerService setupGamerService(UserInterfaceStub userInterfaceStub) {
+		return new GamerService(userInterfaceStub, gamerRepository);
 	}
 
 	private GameService setupGameService(GamerService gamerService) {
-		return new GameService(gameRepository, recruitingGameRepository, archivedGameRepository, gamerService);
+		return new GameService(
+				gameRepository,
+				recruitingGameRepository,
+				archivedGameRepository,
+				gamerService);
 	}
 
-	private Game createGame(String masterId) {
+	private Game createGame(GameService gameService, String masterId) {
 		val name = "Test-game";
 		gameService.createGame(
 				CreateGameTestBuilder.defaultBuilder()

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import stersectas.application.email.VerificationEmailService;
+import stersectas.application.security.CurrentUsernameService;
 import stersectas.domain.token.RandomToken;
 import stersectas.domain.token.VerificationToken;
 import stersectas.domain.token.VerificationTokenRepository;
@@ -22,7 +23,7 @@ import stersectas.domain.user.UserId;
 import stersectas.domain.user.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserInterface {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
@@ -31,6 +32,7 @@ public class UserService {
 	private static final String START_PASSWORD = "password";
 
 	private final UserRepository userRepository;
+	private final CurrentUsernameService currentUsernameService;
 	private final VerificationTokenRepository tokenRepository;
 	private final VerificationEmailService verificationEmailService;
 	private final PasswordEncoder encoder;
@@ -38,11 +40,13 @@ public class UserService {
 
 	@Autowired
 	public UserService(UserRepository userRepository,
+			CurrentUsernameService currentUsernameService,
 			VerificationTokenRepository tokenRepository,
 			VerificationEmailService verificationEmailService,
 			PasswordEncoder encoder,
 			Clock clock) {
 		this.userRepository = userRepository;
+		this.currentUsernameService = currentUsernameService;
 		this.tokenRepository = tokenRepository;
 		this.verificationEmailService = verificationEmailService;
 		this.encoder = encoder;
@@ -111,6 +115,12 @@ public class UserService {
 		user.setPassword(encodedPassword);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public User currentUser() {
+		return findByUsername(currentUsernameService.currentUsername());
+	}
+
 	@Transactional(readOnly = true)
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll();
@@ -119,6 +129,12 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username).get();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<User> findByUserId(String userId) {
+		return userRepository.findByUserId(new UserId(userId));
 	}
 
 	@Transactional

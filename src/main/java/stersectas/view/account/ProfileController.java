@@ -6,23 +6,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import stersectas.application.security.SecurityService;
+import stersectas.application.user.UserService;
 import stersectas.domain.user.User;
 
 @Controller
 @RequestMapping
 public class ProfileController {
 
-	private final SecurityService securityService;
+	private final UserService userService;
 
 	@Autowired
-	public ProfileController(SecurityService securityService) {
-		this.securityService = securityService;
+	public ProfileController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String profile(Model model) {
-		User user = securityService.currentUser();
+		User user = userService.currentUser();
 		model.addAttribute("user", user);
 		return "profile/profile";
 	}

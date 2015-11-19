@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import stersectas.application.game.CreateGame;
 import stersectas.application.game.GameService;
-import stersectas.application.security.SecurityService;
+import stersectas.application.game.GamerService;
 import stersectas.application.validation.AllValidations;
 
 @Controller
@@ -18,12 +18,14 @@ import stersectas.application.validation.AllValidations;
 public class CreateGameController {
 
 	private final GameService gameService;
-	private final SecurityService securityService;
+	private final GamerService gamerService;
 
 	@Autowired
-	public CreateGameController(GameService gameService, SecurityService securityService) {
+	public CreateGameController(
+			GameService gameService,
+			GamerService gamerService) {
 		this.gameService = gameService;
-		this.securityService = securityService;
+		this.gamerService = gamerService;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -39,7 +41,7 @@ public class CreateGameController {
 					createGameForm.getName(),
 					createGameForm.getDescription(),
 					createGameForm.getMaximumPlayers(),
-					securityService.currentUser().getUserId().id()));
+					gamerService.currentGamer().gamerId().id()));
 
 			return "redirect:/game/" + findGameId(createGameForm.getName());
 		}
