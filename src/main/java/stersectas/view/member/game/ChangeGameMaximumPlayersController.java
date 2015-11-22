@@ -53,7 +53,7 @@ public class ChangeGameMaximumPlayersController {
 	}
 
 	private void currentGamerIsMasterOrThrowException(String gameId) {
-		if (!gameService.isCurrentGamerTheMasterOfGame(gameId)) {
+		if (!gameQueryService.isCurrentGamerTheMasterOfGame(gameId)) {
 			throw new AccessDeniedException("Only game master is allowed to change maximum players of game " + gameId);
 		}
 	}

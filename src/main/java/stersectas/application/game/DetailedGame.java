@@ -15,6 +15,7 @@ public class DetailedGame {
 	private final String description;
 	private final int maximumPlayers;
 	private final String masterName;
+	private final boolean archived;
 
 	DetailedGame(Game game, Name masterName) {
 		gameId = game.gameId().id();
@@ -22,6 +23,8 @@ public class DetailedGame {
 		description = game.description().description();
 		maximumPlayers = game.maximumPlayers().maximumPlayers();
 		this.masterName = masterName.name();
+		archived = game.isArchived();
+
 	}
 
 }

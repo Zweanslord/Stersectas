@@ -55,4 +55,16 @@ public abstract class Game {
 
 	public abstract ArchivedGame archive();
 
+	public boolean isRecruiting() {
+		return this instanceof RecruitingGame;
+	}
+
+	public boolean isArchived() {
+		return this instanceof ArchivedGame;
+	}
+
+	public boolean isMaster(Gamer gamer) {
+		return masterId.equals(gamer.gamerId());
+	}
+
 }

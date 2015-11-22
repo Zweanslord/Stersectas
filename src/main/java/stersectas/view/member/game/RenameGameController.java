@@ -54,7 +54,7 @@ public class RenameGameController {
 	}
 
 	private void currentGamerIsMasterOrThrowException(String gameId) {
-		if (!gameService.isCurrentGamerTheMasterOfGame(gameId)) {
+		if (!gameQueryService.isCurrentGamerTheMasterOfGame(gameId)) {
 			throw new AccessDeniedException("Only game master is allowed to rename game " + gameId);
 		}
 	}

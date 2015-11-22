@@ -18,11 +18,7 @@ public class UserInterfaceStub implements UserInterface {
 
 	public UserInterfaceStub() {
 		users = new HashMap<>();
-		users.put(DEFAULT_ID, new User(
-				new UserId(DEFAULT_ID),
-				"TestUser",
-				"test@test.com",
-				"aPassword"));
+		reset();
 	}
 
 	@Override
@@ -48,6 +44,15 @@ public class UserInterfaceStub implements UserInterface {
 		if (users.containsKey(userId)) {
 			CURRENT_ID = userId;
 		}
+	}
+
+	public void reset() {
+		users.clear();
+		users.put(DEFAULT_ID, new User(
+				new UserId(DEFAULT_ID),
+				"TestUser",
+				"test@test.com",
+				"aPassword"));
 	}
 
 }

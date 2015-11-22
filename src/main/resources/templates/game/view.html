@@ -10,7 +10,8 @@
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
-			<div th:if="${isMaster}">
+			<p th:if="${game.archived}" th:text="#{game.archived}">This game has been archived.</p>
+			<div th:if="${isEditable}">
 				<a th:href="@{/member/game/{id}/rename(id=${game.gameId})}" th:title="#{game.rename}" th:text="#{rename}">Rename</a>
 			</div>
 			<p>
@@ -19,14 +20,16 @@
 				
 				<strong th:text="#{game.maximumPlayers}">Maximum Players:</strong>
 				<span th:text="${game.maximumPlayers}">4</span>
-				<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:title="#{game.change.maximum.players}" th:text="#{edit}">Edit</a>
+				<a th:if="${isEditable}" th:href="@{/member/game/{id}/changeMaximumPlayers(id=${game.gameId})}" th:title="#{game.change.maximum.players}" th:text="#{edit}">Edit</a>
 			</p>
 			<p>
 				<span ster:lstext="${game.description}">Within a young universe the first civilizations start their first voyages between the stars.</span>
-				<br th:if="${isMaster}" />
-				<a th:if="${isMaster}" th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
+				<br th:if="${isEditable}" />
+				<a th:if="${isEditable}" th:href="@{/member/game/{id}/changeDescription(id=${game.gameId})}" th:text="#{game.change.description}">Change Game Description</a>
 			</p>
-			
+			<p th:if="${isEditable}">
+				<a th:href="@{/member/game/{id}/archive(id=${game.gameId})}" th:text="#{game.archive}">Archive Game</a>
+			</p>
 		</div>
 	</body>
 </html>

@@ -5,7 +5,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   	  layout:decorator="layout/default">
 	<head>
-		<title  th:text="#{games.recruiting}">Recruiting Games</title>
+		<title  th:text="#{games.archived}">Archived Games</title>
 	</head>
 	<body>
 		<div layout:fragment="content" th:remove="tag">
@@ -18,9 +18,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td colspan="3"><a th:href="@{/member/game/create}" th:text="#{game.create}">Create Game</a></td>
-					</tr>
 					<tr th:each="game : ${games}">
 						<td><a th:href="@{/game/{id}(id=${game.gameId})}" th:text="${game.name}">To the Stars</a></td>
 						<td th:text="${game.maximumPlayers}">4</td>
@@ -29,7 +26,7 @@
 				</tbody>
 			</table>
 			<p>
-				<a th:href="@{/game/archived}" th:text="#{games.archived}">Archived Games</a>
+				<a th:href="@{/game/recruiting}" th:text="#{games.recruiting}">Recruiting Games</a>
 			</p>
 		</div>
 	</body>

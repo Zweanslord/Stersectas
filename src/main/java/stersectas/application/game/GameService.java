@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import stersectas.domain.game.ArchivedGame;
 import stersectas.domain.game.ArchivedGameRepository;
 import stersectas.domain.game.Description;
-import stersectas.domain.game.Game;
 import stersectas.domain.game.GameId;
 import stersectas.domain.game.GameRepository;
 import stersectas.domain.game.MaximumPlayers;
@@ -106,17 +105,6 @@ public class GameService {
 	@Transactional(readOnly = true)
 	public List<RecruitingGame> findAllRecruitingGames() {
 		return recruitingGameRepository.findAllByOrderByNameAsc();
-	}
-
-	@Transactional(readOnly = true)
-	public Game findGameById(String gameId) {
-		return gameRepository.findByGameId(new GameId(gameId)).orElseThrow(() -> new GameNotFoundException());
-	}
-
-	public boolean isCurrentGamerTheMasterOfGame(String gameId) {
-		val currentGamer = gamerService.currentGamer();
-		val masterId = findGameById(gameId).masterId();
-		return currentGamer.gamerId().equals(masterId);
 	}
 
 }

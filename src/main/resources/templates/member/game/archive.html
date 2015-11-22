@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  	  layout:decorator="layout/default">
+	<head>
+		<title  th:text="#{game.archive}">Archive Game</title>
+	</head>
+	<body>
+		<div layout:fragment="content" th:remove="tag">
+			<form th:action="@{archive}" method="post">
+				<p th:text="#{game.archive.confirmation(${game.name})}">Are you sure you wish to archive the game "Star voyagers"?</p>				
+				<button type="submit" th:text="#{game.archive}">Archive Game</button>
+			</form>
+		</div>
+	</body>
+</html>

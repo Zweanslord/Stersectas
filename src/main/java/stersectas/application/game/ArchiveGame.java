@@ -1,12 +1,10 @@
 package stersectas.application.game;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
-@NoArgsConstructor
+@Value
 public class ArchiveGame {
 
-	private String gameId;
+	String gameId;
 
 }
