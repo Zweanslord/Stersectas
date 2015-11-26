@@ -23,7 +23,7 @@ import stersectas.domain.user.UserId;
 import stersectas.domain.user.UserRepository;
 
 @Service
-public class UserService implements UserInterface {
+public class UserService implements UserResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 

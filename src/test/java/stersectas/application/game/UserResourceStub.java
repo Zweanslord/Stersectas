@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import stersectas.application.user.UserInterface;
+import stersectas.application.user.UserResource;
 import stersectas.domain.user.User;
 import stersectas.domain.user.UserId;
 
-public class UserInterfaceStub implements UserInterface {
+public class UserResourceStub implements UserResource {
 
 	public static final String DEFAULT_ID = "USER-TEST-IDENTIFIER";
 
@@ -16,7 +16,7 @@ public class UserInterfaceStub implements UserInterface {
 
 	private Map<String, User> users;
 
-	public UserInterfaceStub() {
+	public UserResourceStub() {
 		users = new HashMap<>();
 		reset();
 	}

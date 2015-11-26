@@ -25,7 +25,7 @@ public class GameQueryServiceIT extends BaseIT {
 	@Autowired private RecruitingGameRepository recruitingGameRepository;
 	@Autowired private ArchivedGameRepository archivedGameRepository;
 
-	private UserInterfaceStub userInterfaceStub = new UserInterfaceStub();
+	private UserResourceStub userInterfaceStub = new UserResourceStub();
 
 	@Before
 	public void setUp() {

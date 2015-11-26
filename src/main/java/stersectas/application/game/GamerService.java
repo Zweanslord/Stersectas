@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import stersectas.application.user.UserInterface;
+import stersectas.application.user.UserResource;
 import stersectas.domain.game.Gamer;
 import stersectas.domain.game.GamerId;
 import stersectas.domain.game.GamerRepository;
@@ -21,30 +21,30 @@ import stersectas.domain.user.User;
 @Service
 public class GamerService {
 
-	private final UserInterface userInterface;
+	private final UserResource userResource;
 	private final GamerRepository gamerRepository;
 
 	@Autowired
 	public GamerService(
-			UserInterface userInterface,
+			UserResource userResource,
 			GamerRepository gamerRepository) {
-		this.userInterface = userInterface;
+		this.userResource = userResource;
 		this.gamerRepository = gamerRepository;
 	}
 
 	public Gamer currentGamer() {
-		return findGamerById(userInterface.currentUser().getUserId().id());
+		return findGamerById(userResource.currentUser().getUserId().id());
 	}
 
 	@Transactional(readOnly = true)
 	public Gamer findGamerById(String gamerId) {
 		return gamerRepository.findByGamerId(new GamerId(gamerId))
-				.orElseGet(supplyGamerFromUsersFunction().apply(userInterface, gamerId));
+				.orElseGet(supplyGamerFromUsersFunction().apply(userResource, gamerId));
 
 	}
 
-	private static BiFunction<UserInterface, String, Supplier<Gamer>> supplyGamerFromUsersFunction() {
-		return (userService, gamerId) -> () -> userService.findByUserId(gamerId)
+	private static BiFunction<UserResource, String, Supplier<Gamer>> supplyGamerFromUsersFunction() {
+		return (userResource, gamerId) -> () -> userResource.findByUserId(gamerId)
 				.map(GamerService::convertToGamer)
 				.orElseThrow(GamerNotFoundException::new);
 	}
@@ -55,7 +55,7 @@ public class GamerService {
 
 	@Transactional(readOnly = true)
 	public Name findNameByGamerId(GamerId gamerId) {
-		return userInterface.findByUserId(gamerId.id())
+		return userResource.findByUserId(gamerId.id())
 				.map(user -> new Name(user.getUsername()))
 				.orElseThrow(GamerNotFoundException::new);
 	}

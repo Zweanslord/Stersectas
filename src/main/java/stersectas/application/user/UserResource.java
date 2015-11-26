@@ -4,7 +4,10 @@ import java.util.Optional;
 
 import stersectas.domain.user.User;
 
-public interface UserInterface {
+/**
+ * Published language for the User Context.
+ */
+public interface UserResource {
 
 	User currentUser();
 
